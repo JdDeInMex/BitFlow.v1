@@ -1,0 +1,533 @@
+/* Estilos para o componente StakingDashboard */
+/* Baseado no design concept BitFlow */
+
+.staking-dashboard {
+  background: linear-gradient(135deg, 
+    rgba(10, 14, 23, 0.95) 0%, 
+    rgba(5, 7, 9, 0.98) 100%
+  );
+  border: 1px solid rgba(30, 136, 229, 0.2);
+  border-radius: 24px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.staking-dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(30, 136, 229, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 230, 118, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(123, 31, 162, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.staking-dashboard > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.staking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.staking-header h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #1E88E5 0%, #00E676 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin: 0;
+}
+
+.apy-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem 1.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.apy-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: #E0E0E0;
+}
+
+.apy-value {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #00E676;
+  text-shadow: 0 0 10px rgba(0, 230, 118, 0.5);
+}
+
+/* Countdown Timer */
+.countdown-timer {
+  background: rgba(30, 136, 229, 0.1);
+  border: 1px solid rgba(30, 136, 229, 0.3);
+  border-radius: 20px;
+  padding: 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.countdown-timer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(30, 136, 229, 0.1) 50%, 
+    transparent 100%
+  );
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.countdown-timer h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0 0 1rem 0;
+}
+
+.timer {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #1E88E5;
+  text-shadow: 0 0 20px rgba(30, 136, 229, 0.6);
+  margin-bottom: 0.5rem;
+  letter-spacing: 2px;
+}
+
+.timer-info {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: #E0E0E0;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Connect Prompt */
+.connect-prompt {
+  text-align: center;
+  padding: 3rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+}
+
+.connect-prompt p {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.125rem;
+  color: #E0E0E0;
+  margin: 0;
+}
+
+/* Staking Content */
+.staking-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Staking Stats */
+.staking-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1E88E5 0%, #00E676 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 230, 118, 0.4);
+  transform: translateY(-4px);
+}
+
+.stat-card:hover::before {
+  transform: scaleX(1);
+}
+
+.stat-card h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #E0E0E0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 1rem 0;
+}
+
+.stat-value {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #00E676;
+  margin: 0;
+  text-shadow: 0 0 15px rgba(0, 230, 118, 0.4);
+}
+
+.token-symbol {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #E0E0E0;
+  opacity: 0.7;
+}
+
+/* Stake Form */
+.stake-form {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.input-group {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.input-group label {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: #FFFFFF;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.125rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #00E676;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 4px rgba(0, 230, 118, 0.1);
+}
+
+.input-group input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.input-group input::placeholder {
+  color: rgba(224, 224, 224, 0.5);
+}
+
+.input-group .token-symbol {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: #E0E0E0;
+  pointer-events: none;
+}
+
+/* Staking Actions */
+.staking-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.stake-button,
+.unstake-button,
+.claim-button {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stake-button {
+  background: linear-gradient(135deg, #1E88E5 0%, #00E676 100%);
+  color: #FFFFFF;
+}
+
+.stake-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 230, 118, 0.4);
+}
+
+.unstake-button {
+  background: linear-gradient(135deg, #7B1FA2 0%, #00BCD4 100%);
+  color: #FFFFFF;
+}
+
+.unstake-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(123, 31, 162, 0.4);
+}
+
+.claim-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid #00E676;
+  color: #00E676;
+}
+
+.claim-button:hover:not(:disabled) {
+  background: rgba(0, 230, 118, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 230, 118, 0.2);
+}
+
+.stake-button:disabled,
+.unstake-button:disabled,
+.claim-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Error Message */
+.error-message {
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  margin-top: 1rem;
+  color: #F44336;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  text-align: center;
+  animation: fadeInError 0.3s ease;
+}
+
+@keyframes fadeInError {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staking Info */
+.staking-info {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 1.5rem;
+}
+
+.staking-info h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0 0 1rem 0;
+}
+
+.staking-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.staking-info li {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: #E0E0E0;
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.staking-info li:before {
+  content: "▶";
+  color: #00E676;
+  font-size: 0.75rem;
+  position: absolute;
+  left: 0;
+  top: 0.125rem;
+}
+
+.staking-info li:last-child {
+  margin-bottom: 0;
+}
+
+/* Animações personalizadas */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(0, 230, 118, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 230, 118, 0.8);
+  }
+}
+
+.timer {
+  animation: pulseGlow 2s infinite;
+}
+
+/* Responsividade */
+@media (max-width: 767px) {
+  .staking-dashboard {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+  
+  .staking-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .staking-header h2 {
+    font-size: 1.75rem;
+  }
+  
+  .timer {
+    font-size: 2.25rem;
+  }
+  
+  .staking-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .staking-actions {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .stake-form {
+    padding: 1.5rem;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 479px) {
+  .staking-dashboard {
+    padding: 1rem;
+  }
+  
+  .staking-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .timer {
+    font-size: 2rem;
+  }
+  
+  .countdown-timer {
+    padding: 1rem;
+  }
+  
+  .stake-form {
+    padding: 1rem;
+  }
+  
+  .staking-actions button {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Modo escuro específico */
+@media (prefers-color-scheme: dark) {
+  .staking-dashboard {
+    background: linear-gradient(135deg, 
+      rgba(10, 14, 23, 0.98) 0%, 
+      rgba(5, 7, 9, 1) 100%
+    );
+  }
+}
+
+/* Animação de entrada */
+.staking-dashboard {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
