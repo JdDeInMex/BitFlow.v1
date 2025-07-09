@@ -8,8 +8,9 @@ import Roadmap from './components/Roadmap/Roadmap';
 import Footer from './components/Footer/Footer';
 import About from './components/About/About';
 import Home from './components/home/Home';
+import Tokenomics from './components/Tokenomics/Tokenomics.tsx'; // Nova importação
 
-type Page = 'home' | 'about' | 'architecture' | 'use-cases' | 'roadmap' | 'docs';
+type Page = 'home' | 'about' | 'tokenomics' | 'architecture' | 'use-cases' | 'roadmap' | 'docs'; // Adicionado 'tokenomics'
 
 // Main App Content Component (inside providers)
 const AppContent: React.FC = () => {
@@ -22,6 +23,7 @@ const AppContent: React.FC = () => {
     const pageMap: Record<string, Page> = {
       '/': 'home',
       '/about': 'about',
+      '/tokenomics': 'tokenomics', // Nova rota
       '/architecture': 'architecture',
       '/use-cases': 'use-cases',
       '/roadmap': 'roadmap',
@@ -127,7 +129,7 @@ const AppContent: React.FC = () => {
   // Função para navegar entre páginas (fixed to accept string and convert to Page)
   const navigateToPage = (page: string) => {
     // Validate that the page is a valid Page type
-    const validPages: Page[] = ['home', 'about', 'architecture', 'use-cases', 'roadmap', 'docs'];
+    const validPages: Page[] = ['home', 'about', 'tokenomics', 'architecture', 'use-cases', 'roadmap', 'docs']; // Adicionado 'tokenomics'
     const validatedPage: Page = validPages.includes(page as Page) ? (page as Page) : 'home';
     
     setCurrentPage(validatedPage);
@@ -136,6 +138,7 @@ const AppContent: React.FC = () => {
     const urlMap: Record<Page, string> = {
       'home': '/',
       'about': '/about',
+      'tokenomics': '/tokenomics', // Nova URL
       'architecture': '/architecture',
       'use-cases': '/use-cases',
       'roadmap': '/roadmap',
@@ -204,6 +207,8 @@ const AppContent: React.FC = () => {
         );
       case 'about':
         return <About />;
+      case 'tokenomics': // Novo case
+        return <Tokenomics />;
       case 'architecture':
         return <Architecture />;
       case 'use-cases':

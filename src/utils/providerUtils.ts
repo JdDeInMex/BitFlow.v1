@@ -36,37 +36,52 @@ export function createViemPublicClient() {
 /**
  * Switch network (using window.ethereum directly)
  */
-export async function switchToNetwork(provider: any, chainId: string, networkConfig?: any) {
+export async function switchToNetwork(chainId: string, networkConfig?: any) {
+  if (!window.ethereum) {
+    throw new Error('No Web3 Provider found');
+  }
+
+  console.log('Attempting to switch to network:', networkConfig?.name, 'chainId:', chainId);
+
   try {
-    const ethereum = typeof window !== 'undefined' ? (window as any).ethereum : null;
-    if (!ethereum) throw new Error('No ethereum provider found');
-
-    await ethereum.request({
+    // Try to switch to the network
+    await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
-      params: [{ chainId }]
+      params: [{ chainId: chainId }],
     });
-  } catch (error: any) {
-    if (error.code === 4902 && networkConfig) {
-      try {
-        const ethereum = typeof window !== 'undefined' ? (window as any).ethereum : null;
-        if (!ethereum) throw new Error('No ethereum provider found');
 
-        await ethereum.request({
+    console.log('Successfully switched network');
+    return true;
+
+  } catch (switchError: any) {
+    console.log('Switch error:', switchError);
+
+    // This error code means the chain has not been added to MetaMask
+    if (switchError.code === 4902 && networkConfig) {
+      try {
+        await window.ethereum.request({
           method: 'wallet_addEthereumChain',
           params: [{
-            chainId: networkConfig.chainId || chainId,
-            chainName: networkConfig.chainName,
-            rpcUrls: networkConfig.rpcUrls,
-            blockExplorerUrls: networkConfig.blockExplorerUrls,
-            nativeCurrency: networkConfig.nativeCurrency
+            chainId: networkConfig.chainId,
+            chainName: networkConfig.name,
+            nativeCurrency: {
+              name: networkConfig.symbol,
+              symbol: networkConfig.symbol,
+              decimals: 18
+            },
+            rpcUrls: [networkConfig.rpcUrl],
+            blockExplorerUrls: [networkConfig.blockExplorer]
           }]
         });
+        console.log('Network added and switched successfully');
+        return true;
       } catch (addError) {
+        console.error('Failed to add network:', addError);
         throw new Error('Failed to add network');
       }
-    } else {
-      throw new Error('Failed to switch network');
     }
+    console.error('Failed to switch network:', switchError);
+    throw switchError;
   }
 }
 

@@ -10,6 +10,90 @@ import {
   analyzeProvider
 } from '../../utils/providerUtils';
 
+// CountdownTimer Component
+interface CountdownTimerProps {
+  initialHours: number;
+  onComplete: () => void;
+  currentAPY: number;
+}
+
+const CountdownTimer: React.FC<CountdownTimerProps> = ({ 
+  initialHours, 
+  onComplete, 
+  currentAPY 
+}) => {
+  const initialSeconds = initialHours * 60 * 60;
+  const [timeRemaining, setTimeRemaining] = useState<number>(initialSeconds);
+  
+  useEffect(() => {
+    if (timeRemaining <= 0) {
+      onComplete();
+      return;
+    }
+    
+    const interval = setInterval(() => {
+      setTimeRemaining(prevTime => prevTime - 1);
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, [timeRemaining, onComplete]);
+  
+  const hours = Math.floor(timeRemaining / 3600);
+  const minutes = Math.floor((timeRemaining % 3600) / 60);
+  const seconds = timeRemaining % 60;
+  
+  const formattedHours = hours.toString().padStart(2, '0');
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+  const formattedSeconds = seconds.toString().padStart(2, '0');
+  
+  const progressPercentage = 100 - (timeRemaining / initialSeconds * 100);
+  const isUrgent = timeRemaining <= 3600;
+  
+  return (
+    <div className={`countdown-timer-wrapper ${isUrgent ? 'countdown-urgent' : ''}`}>
+      <div className="countdown-display-main">
+        <div className="time-segment">
+          <div className="time-value">{formattedHours}</div>
+          <div className="time-label">Hours</div>
+        </div>
+        
+        <div className="time-separator">:</div>
+        
+        <div className="time-segment">
+          <div className="time-value">{formattedMinutes}</div>
+          <div className="time-label">Min</div>
+        </div>
+        
+        <div className="time-separator">:</div>
+        
+        <div className="time-segment">
+          <div className="time-value">{formattedSeconds}</div>
+          <div className="time-label">Sec</div>
+        </div>
+      </div>
+      
+      <div className="progress-container-compact">
+        <div 
+          className="progress-bar-compact" 
+          style={{ width: `${progressPercentage}%` }}
+        ></div>
+      </div>
+      
+      <div className="apy-info-compact">
+        <span className="apy-current">Current APY: <strong>{currentAPY}%</strong></span>
+        <span className="apy-warning">Available until Batch 2</span>
+      </div>
+      
+      {isUrgent && (
+        <div className="urgent-badge">
+          <span className="urgent-icon">⚡</span>
+          <span className="urgent-text">FINAL HOURS!</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
 // Types
 interface HomeProps {
   isConnected: boolean;
@@ -36,6 +120,7 @@ interface Transaction {
   txHash?: string;
   network: string;
   withStaking: boolean;
+  batchNumber: number;
 }
 
 interface Network {
@@ -56,13 +141,60 @@ interface Currency {
   networks: string[];
 }
 
+interface BonusStructure {
+  minUSD: number;
+  bonusPercent: number;
+  label: string;
+  icon: string;
+}
+
+interface CurrentBatch {
+  batchNumber: number;
+  priceUSD: number;
+  phase: string;
+  basePrice: number; // Preço inicial do batch
+  tokensTotal: number; // Total de tokens no batch
+  tokensSold: number; // Tokens já vendidos
+  daysElapsed: number; // Dias passados desde o início do batch
+}
+
 // Constants
-const BFLOW_PRICE = 0.001742; // Price in USD
-const PRESALE_TARGET = 5000000; // $5M target
-const PRESALE_INITIAL_RAISED = 3280000; // Initial raised amount
-const PRESALE_WALLET_ADDRESS = '0x40481B31361888073592B329E73Ac2EFe07fB071'; // Real presale wallet
-const PRESALE_BTC_ADDRESS = 'bc1q3rcakxca9c5nlzaqkfsdw2ppvlwy2evyx9vsz0'; // Bitcoin wallet address
-const WHATSAPP_NUMBER = '5531998203013'; // WhatsApp number for notifications
+const MIN_PURCHASE_USD = 5; // Mínimo de $5 USD
+const DAILY_PRICE_INCREASE = 0.00001; // +$0.00001 por dia
+
+// Bonus structure by purchase amount (USD)
+const BONUS_STRUCTURE: BonusStructure[] = [
+  { minUSD: 10000, bonusPercent: 100, label: "Whale Tier", icon: "🐋" },
+  { minUSD: 5000, bonusPercent: 50, label: "Shark Tier", icon: "🦈" },
+  { minUSD: 1000, bonusPercent: 10, label: "Dolphin Tier", icon: "🐬" },
+  { minUSD: 0, bonusPercent: 0, label: "Fish Tier", icon: "🐟" }
+];
+
+// Get bonus based on USD amount
+const getBonusForAmount = (usdAmount: number): BonusStructure => {
+  for (const tier of BONUS_STRUCTURE) {
+    if (usdAmount >= tier.minUSD) {
+      return tier;
+    }
+  }
+  return BONUS_STRUCTURE[BONUS_STRUCTURE.length - 1];
+};
+
+// Current batch data with daily price increases
+const INITIAL_BATCH_DATA: CurrentBatch = {
+  batchNumber: 1,
+  priceUSD: 0.009,
+  phase: "Early Innovation",
+  basePrice: 0.009,
+  tokensTotal: 400000000, // 400M tokens no Batch 1
+  tokensSold: 287000000, // 287M já vendidos (71.75%)
+  daysElapsed: 12 // 12 dias desde o início
+};
+
+// Constants for HyperLayer0
+const PRESALE_WALLET_ADDRESS = '0x40481B31361888073592B329E73Ac2EFe07fB071';
+const PRESALE_BTC_ADDRESS = 'bc1q3rcakxca9c5nlzaqkfsdw2ppvlwy2evyx9vsz0';
+const WHATSAPP_NUMBER = '5531998203013';
 
 // Networks configuration
 const NETWORKS: Record<string, Network> = {
@@ -76,9 +208,9 @@ const NETWORKS: Record<string, Network> = {
   },
   bsc: {
     chainId: '0x38',
-    name: 'BSC',
+    name: 'BNB Smart Chain',
     symbol: 'BNB',
-    rpcUrl: 'https://bsc-dataseed.binance.org',
+    rpcUrl: 'https://bsc-dataseed1.binance.org',
     blockExplorer: 'https://bscscan.com',
     icon: '🟡'
   },
@@ -92,23 +224,23 @@ const NETWORKS: Record<string, Network> = {
   },
   arbitrum: {
     chainId: '0xa4b1',
-    name: 'Arbitrum',
+    name: 'Arbitrum One',
     symbol: 'ETH',
     rpcUrl: 'https://arb1.arbitrum.io/rpc',
     blockExplorer: 'https://arbiscan.io',
     icon: '🔵'
   },
   bitcoin: {
-    chainId: '0x0', // Bitcoin doesn't use EVM chainId
+    chainId: '0x0',
     name: 'Bitcoin',
     symbol: 'BTC',
-    rpcUrl: '', // Bitcoin uses different RPC structure
+    rpcUrl: '',
     blockExplorer: 'https://blockstream.info',
     icon: '₿'
   }
 };
 
-// Currencies configuration with correct addresses
+// Currencies configuration
 const CURRENCIES: Record<string, Currency> = {
   ETH: {
     symbol: 'ETH',
@@ -166,7 +298,7 @@ const CURRENCIES: Record<string, Currency> = {
   }
 };
 
-// Price feeds (in a real app, use Chainlink oracles or DEX APIs)
+// Price feeds
 const PRICE_FEEDS: Record<string, number> = {
   ETH: 3500,
   BTC: 65000,
@@ -182,6 +314,11 @@ const formatTokens = (tokens: number) => tokens.toLocaleString('en-US', { maximu
 const formatCurrency = (amount: number, currency: string) => 
   `${amount.toLocaleString('en-US', { maximumFractionDigits: 6 })} ${currency}`;
 
+// Calculate current batch price with daily increases
+const getCurrentBatchPrice = (batch: CurrentBatch): number => {
+  return batch.basePrice + (batch.daysElapsed * DAILY_PRICE_INCREASE);
+};
+
 // WhatsApp notification function
 const sendWhatsAppNotification = async (
   walletAddress: string, 
@@ -189,58 +326,48 @@ const sendWhatsAppNotification = async (
   currency: string, 
   tokens: number, 
   withStaking: boolean, 
+  batchNumber: number,
   txHash?: string
 ) => {
   const shortWallet = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
   const usdValue = amount * (PRICE_FEEDS[currency] || 1);
   const timestamp = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
   
-  const message = `🚀 *NOVA COMPRA BFLOW* 🚀
+  const message = `🚀 *NOVA COMPRA HYPERLAYER0* 🚀
 
 💼 *Carteira:* ${shortWallet}
 💰 *Valor:* ${amount.toFixed(8)} ${currency}
 💵 *Valor USD:* $${usdValue.toLocaleString('en-US', { maximumFractionDigits: 2 })}
-🪙 *Tokens BFLOW:* ${formatTokens(tokens)}
-${withStaking ? '🔒 *COM STAKING ATIVADO*' : '💫 *SEM STAKING*'}
+🪙 *Tokens HL0:* ${formatTokens(tokens)}
+📦 *Lote:* ${batchNumber} (Early Innovation)
+🎁 *Bônus:* Baseado no valor investido
+${withStaking ? '🔒 *COM STAKING ATIVADO (100-1000% APR)*' : '💫 *SEM STAKING*'}
 🌐 *Rede:* ${currency}
 ${txHash ? `🔗 *TX Hash:* ${txHash.slice(0, 10)}...${txHash.slice(-8)}` : ''}
 
-⏰ *Horário:* ${timestamp}`;
+💡 *PREÇO ATUAL:* $${getCurrentBatchPrice(INITIAL_BATCH_DATA).toFixed(6)}
+📈 *AUMENTA:* +$0.00001 a cada 24h!
+
+⏰ *Horário:* ${timestamp}
+
+#HyperLayer0 #Web3 #Layer0 #PureUtility`;
 
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
   
-  // Open WhatsApp in a new tab
   window.open(whatsappUrl, '_blank');
 };
 
 // Local storage helpers
 const getStoredInvestments = (address: string): UserInvestment => {
   if (!address) return { totalTokens: 0, totalInvested: 0, transactions: [] };
-  const stored = localStorage.getItem(`bflow_investments_${address.toLowerCase()}`);
+  const stored = localStorage.getItem(`hl0_investments_${address.toLowerCase()}`);
   return stored ? JSON.parse(stored) : { totalTokens: 0, totalInvested: 0, transactions: [] };
 };
 
 const saveInvestments = (address: string, investments: UserInvestment) => {
   if (!address) return;
-  localStorage.setItem(`bflow_investments_${address.toLowerCase()}`, JSON.stringify(investments));
-};
-
-// Global presale tracking
-const getGlobalPresaleData = () => {
-  const stored = localStorage.getItem('bflow_global_presale');
-  return stored ? JSON.parse(stored) : { totalRaised: PRESALE_INITIAL_RAISED, totalTransactions: 0 };
-};
-
-const updateGlobalPresaleData = (additionalAmount: number) => {
-  const current = getGlobalPresaleData();
-  const updated = {
-    totalRaised: current.totalRaised + additionalAmount,
-    totalTransactions: current.totalTransactions + 1,
-    lastUpdate: Date.now()
-  };
-  localStorage.setItem('bflow_global_presale', JSON.stringify(updated));
-  return updated;
+  localStorage.setItem(`hl0_investments_${address.toLowerCase()}`, JSON.stringify(investments));
 };
 
 const Home: React.FC<HomeProps> = ({
@@ -253,13 +380,6 @@ const Home: React.FC<HomeProps> = ({
   onPurchase
 }) => {
   // State
-  const [timeLeft, setTimeLeft] = useState({
-    days: 15,
-    hours: 8,
-    minutes: 42,
-    seconds: 30
-  });
-
   const [amount, setAmount] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'crypto'>('crypto');
   const [selectedCurrency, setSelectedCurrency] = useState('ETH');
@@ -273,32 +393,23 @@ const Home: React.FC<HomeProps> = ({
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [balances, setBalances] = useState<Record<string, number>>({});
-  const [currentPresaleData, setCurrentPresaleData] = useState(() => getGlobalPresaleData());
   const [showBitcoinInstructions, setShowBitcoinInstructions] = useState(false);
   const [withStaking, setWithStaking] = useState(false);
   const [currentChainId, setCurrentChainId] = useState<string | null>(null);
+  const [isLoadingBalances, setIsLoadingBalances] = useState(false);
+  const [currentBatch, setCurrentBatch] = useState(INITIAL_BATCH_DATA);
 
-  // Countdown timer
+  // Update current batch price every second to simulate daily increases
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 };
-        } else if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        } else if (prev.hours > 0) {
-          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        } else if (prev.days > 0) {
-          return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
-        } else {
-          onCountdownComplete();
-          return prev;
-        }
-      });
+    const interval = setInterval(() => {
+      setCurrentBatch(prev => ({
+        ...prev,
+        priceUSD: getCurrentBatchPrice(prev)
+      }));
     }, 1000);
 
-    return () => clearInterval(timer);
-  }, [onCountdownComplete]);
+    return () => clearInterval(interval);
+  }, []);
 
   // Get current chain ID
   useEffect(() => {
@@ -309,7 +420,6 @@ const Home: React.FC<HomeProps> = ({
         const chainId = await provider.request({ method: 'eth_chainId' });
         setCurrentChainId(chainId);
         
-        // Auto-select network based on chain ID
         const networkEntry = Object.entries(NETWORKS).find(([_, network]) => 
           network.chainId === chainId
         );
@@ -325,7 +435,6 @@ const Home: React.FC<HomeProps> = ({
     if (isConnected && provider) {
       getChainId();
       
-      // Listen for chain changes
       const handleChainChanged = (chainId: string) => {
         setCurrentChainId(chainId);
         const networkEntry = Object.entries(NETWORKS).find(([_, network]) => 
@@ -348,34 +457,25 @@ const Home: React.FC<HomeProps> = ({
   // Load wallet balances
   const loadBalances = useCallback(async () => {
     if (!provider || !walletAddress) return;
-
-    console.log('Loading balances for:', walletAddress, 'Network:', selectedNetwork);
-
+    
+    setIsLoadingBalances(true);
     try {
       const newBalances: Record<string, number> = {};
 
-      // Get native token balance for current network
-      try {
-        const nativeBalance = await getWalletBalance(provider, walletAddress);
-        console.log('Native balance raw:', nativeBalance);
-        
-        // Handle different native tokens per network
-        if (selectedNetwork === 'ethereum' || selectedNetwork === 'arbitrum') {
-          newBalances['ETH'] = parseFloat(nativeBalance);
-        } else if (selectedNetwork === 'bsc') {
-          newBalances['BNB'] = parseFloat(nativeBalance);
-        } else if (selectedNetwork === 'polygon') {
-          newBalances['MATIC'] = parseFloat(nativeBalance);
+      if (selectedNetwork !== 'bitcoin') {
+        try {
+          const nativeBalance = await getWalletBalance(provider, walletAddress);
+          const nativeToken = NETWORKS[selectedNetwork]?.symbol;
+          if (nativeToken) {
+            newBalances[nativeToken] = parseFloat(nativeBalance);
+          }
+        } catch (err) {
+          console.error('Error loading native balance:', err);
         }
-        
-        console.log('Native balance parsed:', newBalances);
-      } catch (err) {
-        console.error('Error loading native balance:', err);
       }
 
-      // Get ERC20 token balances
       for (const [symbol, currency] of Object.entries(CURRENCIES)) {
-        if (currency.address && currency.address[selectedNetwork]) {
+        if (currency.address?.[selectedNetwork]) {
           try {
             const tokenBalance = await getTokenBalance(
               provider,
@@ -384,93 +484,98 @@ const Home: React.FC<HomeProps> = ({
               currency.decimals
             );
             newBalances[symbol] = parseFloat(tokenBalance);
-            console.log(`${symbol} balance:`, newBalances[symbol]);
           } catch (err) {
-            console.log(`Could not load ${symbol} balance:`, err);
+            console.error(`Error loading ${symbol} balance:`, err);
             newBalances[symbol] = 0;
           }
         }
       }
 
-      console.log('All balances loaded:', newBalances);
       setBalances(newBalances);
     } catch (err) {
       console.error('Error loading balances:', err);
+    } finally {
+      setIsLoadingBalances(false);
     }
   }, [provider, walletAddress, selectedNetwork]);
 
-  // Load user investments and balances when wallet connects
+  // Load user investments when wallet connects
   useEffect(() => {
     if (isConnected && walletAddress) {
       const investments = getStoredInvestments(walletAddress);
       setUserInvestments(investments);
       loadBalances();
-      
-      // Refresh global presale data
-      setCurrentPresaleData(getGlobalPresaleData());
     } else {
       setUserInvestments({ totalTokens: 0, totalInvested: 0, transactions: [] });
       setBalances({});
     }
   }, [isConnected, walletAddress, loadBalances]);
 
-  // Reload balances when network changes
-  useEffect(() => {
-    if (isConnected && walletAddress) {
-      loadBalances();
-    }
-  }, [selectedNetwork, isConnected, walletAddress, loadBalances]);
-
   // Switch network
   const switchNetwork = useCallback(async (networkKey: string) => {
-    if (!provider) return;
-
-    // Handle Bitcoin network separately
     if (networkKey === 'bitcoin') {
       setSelectedNetwork(networkKey);
       setSelectedCurrency('BTC');
-      setError(''); 
       return;
     }
 
+    setIsLoading(true);
+    setError('');
+
     try {
-      setIsLoading(true);
       const network = NETWORKS[networkKey];
-      
-      await switchToNetwork(provider, network.chainId, {
-        chainName: network.name,
-        rpcUrls: [network.rpcUrl],
-        blockExplorerUrls: [network.blockExplorer],
-        nativeCurrency: {
-          name: network.name,
-          symbol: network.symbol,
-          decimals: 18
-        }
+
+      if (!window.ethereum) {
+        throw new Error('No Web3 Provider found');
+      }
+
+      const currentChainId = await (window.ethereum as any).request({ 
+        method: 'eth_chainId' 
       });
-      
-      setSelectedNetwork(networkKey);
-      setError('');
-      setSuccess('Network switched successfully!');
-      setTimeout(() => setSuccess(''), 3000);
-      
-      // Reload balances after network switch
-      setTimeout(() => loadBalances(), 1000);
+
+      if (currentChainId !== network.chainId) {
+        await switchToNetwork(network.chainId, network);
+        setSelectedNetwork(networkKey);
+        
+        const nativeSymbol = network.symbol;
+        if (CURRENCIES[nativeSymbol]) {
+          setSelectedCurrency(nativeSymbol);
+        }
+        
+        await loadBalances();
+        setSuccess(`Switched to ${network.name}`);
+      }
+
     } catch (err: any) {
-      console.error('Error switching network:', err);
-      setError(getProviderErrorMessage(err));
+      console.error('Network switch failed:', err);
+      const errorMessage = err.code === 4001 
+        ? 'User rejected network switch'
+        : (err.message || 'Failed to switch network');
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
-  }, [provider, loadBalances]);
+  }, [loadBalances]);
 
-  // Calculate tokens to receive
+  // Calculate tokens to receive with tier-based bonus
   const tokensToReceive = useMemo(() => {
-    if (!amount || parseFloat(amount) <= 0) return 0;
+    if (!amount || parseFloat(amount) <= 0) return { base: 0, bonus: 0, total: 0, tier: BONUS_STRUCTURE[3] };
+    
     const amountNum = parseFloat(amount);
     const currencyPrice = PRICE_FEEDS[selectedCurrency] || 1;
     const usdValue = amountNum * currencyPrice;
-    return usdValue / BFLOW_PRICE;
-  }, [amount, selectedCurrency]);
+    const baseTokens = usdValue / currentBatch.priceUSD;
+    
+    const tier = getBonusForAmount(usdValue);
+    const bonusTokens = (baseTokens * tier.bonusPercent) / 100;
+    
+    return {
+      base: baseTokens,
+      bonus: bonusTokens,
+      total: baseTokens + bonusTokens,
+      tier: tier
+    };
+  }, [amount, selectedCurrency, currentBatch.priceUSD]);
 
   // Available currencies for selected network
   const availableCurrencies = useMemo(() => {
@@ -484,7 +589,6 @@ const Home: React.FC<HomeProps> = ({
     const currentCurrencyAvailable = availableCurrencies.some(([symbol]) => symbol === selectedCurrency);
     
     if (!currentCurrencyAvailable) {
-      // Select native currency of the network or first available
       const nativeSymbol = NETWORKS[selectedNetwork]?.symbol;
       const nativeCurrency = availableCurrencies.find(([symbol]) => symbol === nativeSymbol);
       
@@ -509,17 +613,23 @@ const Home: React.FC<HomeProps> = ({
       return;
     }
 
-    // Check balance
-    const currentBalance = balances[selectedCurrency] || 0;
-    if (amountNum > currentBalance) {
-      setError(`Insufficient balance. You have ${currentBalance.toFixed(6)} ${selectedCurrency}`);
+    // Check minimum purchase in USD
+    const currencyPrice = PRICE_FEEDS[selectedCurrency] || 1;
+    const usdValue = amountNum * currencyPrice;
+
+    if (usdValue < MIN_PURCHASE_USD) {
+      setError(`Minimum purchase is $${MIN_PURCHASE_USD} USD`);
       return;
     }
 
-    // Handle Bitcoin payments
-    if (selectedCurrency === 'BTC' && selectedNetwork === 'bitcoin') {
-      setWithStaking(stakingOption);
-      setShowBitcoinInstructions(true);
+    const currentBalance = balances[selectedCurrency] || 0;
+    const isNativeToken = !CURRENCIES[selectedCurrency]?.address;
+    const gasBuffer = isNativeToken ? 0.01 : 0;
+
+    if (amountNum > (currentBalance * (1 - gasBuffer))) {
+      setError(`Insufficient balance. You have ${currentBalance.toFixed(6)} ${selectedCurrency}${
+        isNativeToken ? ' (need extra for gas fees)' : ''
+      }`);
       return;
     }
 
@@ -531,9 +641,15 @@ const Home: React.FC<HomeProps> = ({
       const currency = CURRENCIES[selectedCurrency];
       let txHash = '';
 
+      if (selectedCurrency === 'BTC' && selectedNetwork === 'bitcoin') {
+        setWithStaking(stakingOption);
+        setShowBitcoinInstructions(true);
+        setIsLoading(false);
+        return;
+      }
+
       // Send transaction
       if (currency.address && currency.address[selectedNetwork]) {
-        // ERC20 token transfer
         txHash = await sendTokenTransaction(
           provider,
           currency.address[selectedNetwork],
@@ -542,7 +658,6 @@ const Home: React.FC<HomeProps> = ({
           currency.decimals
         );
       } else {
-        // Native token transfer
         txHash = await sendNativeTransaction(
           provider,
           PRESALE_WALLET_ADDRESS,
@@ -551,9 +666,7 @@ const Home: React.FC<HomeProps> = ({
       }
 
       // Calculate values
-      const currencyPrice = PRICE_FEEDS[selectedCurrency] || 1;
-      const usdValue = amountNum * currencyPrice;
-      const tokens = tokensToReceive;
+      const tokens = tokensToReceive.total;
 
       // Create transaction record
       const newTransaction: Transaction = {
@@ -564,7 +677,8 @@ const Home: React.FC<HomeProps> = ({
         timestamp: Date.now(),
         txHash,
         network: selectedNetwork,
-        withStaking: stakingOption
+        withStaking: stakingOption,
+        batchNumber: currentBatch.batchNumber
       };
 
       // Update user investments
@@ -577,23 +691,21 @@ const Home: React.FC<HomeProps> = ({
       setUserInvestments(updatedInvestments);
       saveInvestments(walletAddress, updatedInvestments);
 
-      // Update global presale data
-      const updatedPresaleData = updateGlobalPresaleData(usdValue);
-      setCurrentPresaleData(updatedPresaleData);
-
       // Send WhatsApp notification
-      await sendWhatsAppNotification(walletAddress, amountNum, selectedCurrency, tokens, stakingOption, txHash);
+      await sendWhatsAppNotification(
+        walletAddress, 
+        amountNum, 
+        selectedCurrency, 
+        tokens, 
+        stakingOption, 
+        currentBatch.batchNumber,
+        txHash
+      );
 
-      // Show success message
-      setSuccess(`Successfully purchased ${formatTokens(tokens)} BFLOW!`);
-      
-      // Reset form
+      setSuccess(`Successfully purchased ${formatTokens(tokens)} HL0 tokens! 🚀`);
       setAmount('');
       
-      // Reload balances
       setTimeout(() => loadBalances(), 2000);
-
-      // Call parent purchase handler
       onPurchase(paymentMethod, amountNum, selectedCurrency);
 
     } catch (err: any) {
@@ -612,20 +724,21 @@ const Home: React.FC<HomeProps> = ({
     tokensToReceive,
     userInvestments,
     paymentMethod,
+    currentBatch,
     onConnect,
     onPurchase,
     loadBalances,
     balances
   ]);
 
-  // Handle manual Bitcoin confirmation
+  // Handle Bitcoin confirmation
   const handleBitcoinConfirmation = useCallback(async () => {
     if (!amount || !walletAddress) return;
 
     const amountNum = parseFloat(amount);
     const currencyPrice = PRICE_FEEDS['BTC'] || 65000;
     const usdValue = amountNum * currencyPrice;
-    const tokens = tokensToReceive;
+    const tokens = tokensToReceive.total;
 
     const newTransaction: Transaction = {
       id: Date.now().toString(),
@@ -634,7 +747,8 @@ const Home: React.FC<HomeProps> = ({
       tokens,
       timestamp: Date.now(),
       network: 'bitcoin',
-      withStaking
+      withStaking,
+      batchNumber: currentBatch.batchNumber
     };
 
     const updatedInvestments: UserInvestment = {
@@ -646,30 +760,40 @@ const Home: React.FC<HomeProps> = ({
     setUserInvestments(updatedInvestments);
     saveInvestments(walletAddress, updatedInvestments);
 
-    // Update global presale data
-    const updatedPresaleData = updateGlobalPresaleData(usdValue);
-    setCurrentPresaleData(updatedPresaleData);
+    await sendWhatsAppNotification(
+      walletAddress, 
+      amountNum, 
+      'BTC', 
+      tokens, 
+      withStaking,
+      currentBatch.batchNumber
+    );
 
-    // Send WhatsApp notification
-    await sendWhatsAppNotification(walletAddress, amountNum, 'BTC', tokens, withStaking);
-
-    // Show success
-    setSuccess(`Successfully purchased ${formatTokens(tokens)} BFLOW with Bitcoin!`);
-
-    // Reset form and close instructions
+    setSuccess(`Successfully purchased ${formatTokens(tokens)} HL0 with Bitcoin! 🚀`);
     setAmount('');
     setShowBitcoinInstructions(false);
     setWithStaking(false);
 
-    // Call parent purchase handler
     onPurchase(paymentMethod, amountNum, 'BTC');
-  }, [amount, walletAddress, tokensToReceive, userInvestments, paymentMethod, onPurchase, withStaking]);
+  }, [amount, walletAddress, tokensToReceive, userInvestments, paymentMethod, onPurchase, withStaking, currentBatch]);
 
   // Current balance for selected currency
   const currentBalance = balances[selectedCurrency] || 0;
-
-  // Check if current network matches selected network
   const isCorrectNetwork = currentChainId === NETWORKS[selectedNetwork]?.chainId;
+
+  // Calculate next price increase time
+  const getNextPriceIncreaseTime = () => {
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    
+    const timeUntilNextIncrease = tomorrow.getTime() - now.getTime();
+    const hours = Math.floor(timeUntilNextIncrease / (1000 * 60 * 60));
+    const minutes = Math.floor((timeUntilNextIncrease % (1000 * 60 * 60)) / (1000 * 60));
+    
+    return `${hours}h ${minutes}m`;
+  };
 
   return (
     <main className="main-purchase-section">
@@ -677,67 +801,106 @@ const Home: React.FC<HomeProps> = ({
         <div className="main-layout">
           {/* Left Side - Text Content */}
           <div className="text-side">
-            <button className="connect-btn" onClick={onConnect}>
-              {isConnected ? '✓ Wallet Connected' : '🔗 Connect Wallet'}
-            </button>
+            <div className="guaranteed-returns-banner">
+              <div className="banner-content">
+                <div className="banner-icon">💰</div>
+                <div className="banner-text">
+                  <span className="banner-title">10,000%+ GUARANTEED!</span>
+                  <span className="banner-subtitle">${currentBatch.priceUSD.toFixed(6)} → $0.90 Launch • 100x Presale Only</span>
+                </div>
+              </div>
+            </div>
             
             <h1>
-              The Future of <span className="highlight">Bitcoin DeFi</span> is Here
+              The Future of <span className="highlight">Pure Utility</span> Infrastructure
             </h1>
             
             <p>
-              <strong>$BFLOW</strong> is the native token of the Bitflow ecosystem, 
-              the first native Bitcoin DEX that allows Bitcoiners 
-              to trade, lend and earn real yield with Bitcoin, 
-              eliminating malicious intermediaries.
+              <strong>HyperLayer0</strong> introduces the revolutionary "Pure Utility" model - 
+              the first Layer 0 with ZERO burns on everything. Your tokens, your choice, forever. 
+              Value through genuine utility, not artificial scarcity.
             </p>
 
             <div className="features-grid">
               <div className="feature-item">
-                <div className="feature-icon">₿</div>
+                <div className="feature-icon">🆓</div>
                 <div className="feature-text">
-                  <h4>Bitcoin Native</h4>
-                  <p>Built specifically for the Bitcoin ecosystem</p>
+                  <h4>Zero Burns Forever</h4>
+                  <p>No transaction burns, no bridge burns, no staking penalties - ever!</p>
                 </div>
               </div>
               
               <div className="feature-item">
-                <div className="feature-icon">🔄</div>
+                <div className="feature-icon">💎</div>
                 <div className="feature-text">
-                  <h4>DEX Aggregator</h4>
-                  <p>Best swap rates guaranteed on Stacks network</p>
+                  <h4>Your Tokens = Eternal</h4>
+                  <p>9.9B tokens forever - no artificial scarcity, just pure utility</p>
                 </div>
               </div>
-              
+
               <div className="feature-item">
-                <div className="feature-icon">💰</div>
+                <div className="feature-icon">⚡</div>
                 <div className="feature-text">
-                  <h4>Real Yield</h4>
-                  <p>Earn real yield derived from trading activity</p>
+                  <h4>Infinite Freedom</h4>
+                  <p>Use, trade, bridge, stake or hold - zero pressure, maximum choice</p>
                 </div>
               </div>
-              
+
               <div className="feature-item">
-                <div className="feature-icon">🛡️</div>
+                <div className="feature-icon">🚀</div>
                 <div className="feature-text">
-                  <h4>Non-Custodial</h4>
-                  <p>Your keys, your coins, your yield</p>
+                  <h4>Value = Utility</h4>
+                  <p>Price grows with real adoption and genuine ecosystem value</p>
                 </div>
               </div>
             </div>
 
             <div className="stats-section">
               <div className="stat">
-                <div className="stat-number">$18.7M</div>
-                <div className="stat-label">Total Value Locked</div>
+                <div className="stat-number">0%</div>
+                <div className="stat-label">Total Burns</div>
               </div>
               <div className="stat">
-                <div className="stat-number">$2.4M</div>
-                <div className="stat-label">24h Volume</div>
+                <div className="stat-number">9.9B</div>
+                <div className="stat-label">Forever Supply</div>
               </div>
               <div className="stat">
-                <div className="stat-number">24</div>
-                <div className="stat-label">Trading Pairs</div>
+                <div className="stat-number">100%</div>
+                <div className="stat-label">User Freedom</div>
+              </div>
+              <div className="stat">
+                <div className="stat-number">∞</div>
+                <div className="stat-label">Possibilities</div>
+              </div>
+            </div>
+
+            {/* Bonus Structure Section */}
+            <div className="bonus-structure-section">
+              <h3>🎁 Bonus Structure - Batch {currentBatch.batchNumber}</h3>
+              <p className="bonus-subtitle">Higher investment = Higher bonus percentage</p>
+              
+              <div className="bonus-tiers">
+                {BONUS_STRUCTURE.map((tier, index) => (
+                  <div key={index} className="bonus-tier">
+                    <div className="tier-icon">{tier.icon}</div>
+                    <div className="tier-info">
+                      <div className="tier-name">{tier.label}</div>
+                      <div className="tier-requirement">
+                        {tier.minUSD > 0 ? `$${tier.minUSD.toLocaleString()}+` : 'Any amount'}
+                      </div>
+                      <div className="tier-bonus">+{tier.bonusPercent}% Bonus</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="bonus-example">
+                <h4>💡 Example:</h4>
+                <p>
+                  Buy $10,000 worth → Get 🐋 <strong>100% bonus</strong><br/>
+                  Buy $5,000 worth → Get 🦈 <strong>50% bonus</strong><br/>
+                  Buy $1,000 worth → Get 🐬 <strong>10% bonus</strong>
+                </p>
               </div>
             </div>
           </div>
@@ -745,45 +908,59 @@ const Home: React.FC<HomeProps> = ({
           {/* Right Side - Purchase Widget */}
           <div className="card-side">
             <div className="purchase-widget">
-              {/* Countdown */}
+              {/* Countdown and Batch Info Combined */}
               <div className="countdown-section">
-                <h2>🚀 Pre-Sale Ends In:</h2>
-                <div className="countdown-display">
-                  <div>
-                    <div className="countdown-item">
-                      <span className="countdown-number">{formatNumber(timeLeft.days)}</span>
-                      <span className="countdown-label">Days</span>
-                    </div>
-                    <span className="separator">:</span>
-                    <div className="countdown-item">
-                      <span className="countdown-number">{formatNumber(timeLeft.hours)}</span>
-                      <span className="countdown-label">Hours</span>
-                    </div>
-                    <span className="separator">:</span>
-                    <div className="countdown-item">
-                      <span className="countdown-number">{formatNumber(timeLeft.minutes)}</span>
-                      <span className="countdown-label">Min</span>
-                    </div>
-                    <span className="separator">:</span>
-                    <div className="countdown-item">
-                      <span className="countdown-number">{formatNumber(timeLeft.seconds)}</span>
-                      <span className="countdown-label">Sec</span>
-                    </div>
+                <div className="batch-header">
+                  <h2>🎯 Batch {currentBatch.batchNumber} - {currentBatch.phase}</h2>
+                  <span className="current-price-display">${currentBatch.priceUSD.toFixed(6)}</span>
+                </div>
+                
+                <div className="countdown-timer-container">
+                  <h3>📈 Next Price Increase In:</h3>
+                  <CountdownTimer 
+                    initialHours={24}
+                    onComplete={onCountdownComplete}
+                    currentAPY={1000} // Batch 2 APY
+                  />
+                  <div className="price-increase-info">
+                    <span>Tomorrow: <strong>${(currentBatch.priceUSD + DAILY_PRICE_INCREASE).toFixed(6)}</strong></span>
+                    <span className="increase-note">APY stays 1000%</span>
+                  </div>
+                </div>
+
+                <div className="batch-quick-info">
+                  <div className="quick-stat">
+                    <span className="stat-icon">🎁</span>
+                    <span>Max Bonus: <strong>100% 🐋</strong></span>
+                  </div>
+                  <div className="quick-stat">
+                    <span className="stat-icon">🔮</span>
+                    <span>Current APY: <strong>1000%</strong></span>
                   </div>
                 </div>
               </div>
 
-              {/* Progress */}
+              {/* Batch Progress with Next Batch Info */}
               <div className="progress-section">
                 <div className="raised-amount">
-                  Raised: ${currentPresaleData.totalRaised.toLocaleString()} / ${PRESALE_TARGET.toLocaleString()}
+                  Batch {currentBatch.batchNumber}: {currentBatch.tokensSold.toLocaleString()} / {currentBatch.tokensTotal.toLocaleString()} tokens
                 </div>
                 <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: `${Math.min((currentPresaleData.totalRaised / PRESALE_TARGET) * 100, 100)}%` }}></div>
+                  <div className="progress-fill" style={{ width: `${(currentBatch.tokensSold / currentBatch.tokensTotal) * 100}%` }}></div>
                 </div>
                 <div className="progress-stats">
-                  <span>{((currentPresaleData.totalRaised / PRESALE_TARGET) * 100).toFixed(1)}% Complete</span>
-                  <span>${(PRESALE_TARGET - currentPresaleData.totalRaised).toLocaleString()} Remaining</span>
+                  <span>{((currentBatch.tokensSold / currentBatch.tokensTotal) * 100).toFixed(2)}% Complete</span>
+                  <span>{(currentBatch.tokensTotal - currentBatch.tokensSold).toLocaleString()} Remaining</span>
+                </div>
+                
+                <div className="next-batch-info">
+                  <div className="next-batch-alert">
+                    <span className="alert-icon">⚡</span>
+                    <div className="alert-content">
+                      <div className="batch-warning-line"><strong>Batch 2:</strong> Price jumps directly to <strong>$0.015</strong></div>
+                      <div className="batch-warning-line">APY drops to <strong>966%</strong></div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -792,27 +969,20 @@ const Home: React.FC<HomeProps> = ({
                 <div className="user-section">
                   <div className="user-stats">
                     <div className="user-stat">
-                      <span className="stat-label">Your $BFLOW Tokens</span>
-                      <span className="stat-value">{formatTokens(userInvestments.totalTokens)} BFLOW</span>
+                      <span className="stat-label">Your HL0 Tokens</span>
+                      <span className="stat-value">{formatTokens(userInvestments.totalTokens)} HL0</span>
                     </div>
                     <div className="user-stat">
                       <span className="stat-label">Total Invested</span>
                       <span className="stat-value">${userInvestments.totalInvested.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
                     </div>
                     <div className="user-stat">
-                      <span className="stat-label">Estimated APY</span>
-                      <span className="stat-value">{currentAPY}%</span>
+                      <span className="stat-label">Potential APR</span>
+                      <span className="stat-value">{currentAPY}% - 1000%</span>
                     </div>
                   </div>
                 </div>
               )}
-
-              {/* Token Price */}
-              <div className="price-section">
-                <div className="token-price">
-                  1 BFLOW = ${BFLOW_PRICE}
-                </div>
-              </div>
 
               {/* Purchase Form */}
               <div className="form-section">
@@ -875,7 +1045,11 @@ const Home: React.FC<HomeProps> = ({
                       </select>
                       {isConnected && currentBalance > 0 && (
                         <div className="balance-info">
-                          Balance: {formatCurrency(currentBalance, selectedCurrency)}
+                          {isLoadingBalances ? (
+                            '⏳ Loading balance...'
+                          ) : (
+                            `Balance: ${formatCurrency(currentBalance, selectedCurrency)}`
+                          )}
                         </div>
                       )}
                     </div>
@@ -907,12 +1081,32 @@ const Home: React.FC<HomeProps> = ({
                       )}
                     </div>
                   </div>
-                  {amount && tokensToReceive > 0 && (
+                  {amount && tokensToReceive.total > 0 && (
                     <div className="tokens-received">
-                      You will receive: {formatTokens(tokensToReceive)} BFLOW
+                      <div className="tokens-calculation">
+                        <div className="tier-badge">
+                          {tokensToReceive.tier.icon} {tokensToReceive.tier.label} - {tokensToReceive.tier.bonusPercent}% Bonus
+                        </div>
+                        <div className="tokens-breakdown">
+                          <div className="token-line">
+                            <span>Base tokens:</span>
+                            <span><strong>{formatTokens(tokensToReceive.base)} HL0</strong></span>
+                          </div>
+                          {tokensToReceive.bonus > 0 && (
+                            <div className="token-line bonus-line">
+                              <span>Bonus tokens:</span>
+                              <span><strong>+{formatTokens(tokensToReceive.bonus)} HL0</strong></span>
+                            </div>
+                          )}
+                          <div className="token-line total-line">
+                            <span>Total you receive:</span>
+                            <span><strong>{formatTokens(tokensToReceive.total)} HL0</strong></span>
+                          </div>
+                        </div>
+                      </div>
                       {paymentMethod === 'crypto' && (
                         <div className="usd-equivalent">
-                          ≈ ${(parseFloat(amount) * (PRICE_FEEDS[selectedCurrency] || 1)).toLocaleString('en-US', { maximumFractionDigits: 2 })} USD
+                          Purchase value: ${(parseFloat(amount) * (PRICE_FEEDS[selectedCurrency] || 1)).toLocaleString('en-US', { maximumFractionDigits: 2 })} USD
                         </div>
                       )}
                     </div>
@@ -943,7 +1137,7 @@ const Home: React.FC<HomeProps> = ({
                   ) : selectedCurrency === 'BTC' && selectedNetwork === 'bitcoin' ? (
                     `₿ Pay ${amount} BTC`
                   ) : (
-                    `💰 Buy ${formatTokens(tokensToReceive)} BFLOW`
+                    `💰 Buy ${formatTokens(tokensToReceive.total)} HL0`
                   )}
                 </button>
 
@@ -959,7 +1153,7 @@ const Home: React.FC<HomeProps> = ({
                   ) : selectedCurrency === 'BTC' && selectedNetwork === 'bitcoin' ? (
                     `🔒 Pay ${amount} BTC + Staking`
                   ) : (
-                    `🔒 Buy ${formatTokens(tokensToReceive)} BFLOW + Staking`
+                    `🔒 Buy ${formatTokens(tokensToReceive.total)} HL0 + Staking`
                   )}
                 </button>
 
@@ -967,7 +1161,8 @@ const Home: React.FC<HomeProps> = ({
                   <div className="staking-benefit">
                     <span className="staking-icon">🔒</span>
                     <div className="staking-text">
-                      <strong>Staking Bonus:</strong> Lock your tokens for 12 months and earn {currentAPY}% APY + extra rewards!
+                      <strong>Pure Choice Staking:</strong> Lock tokens and earn 100-1000% APR based on your batch! 
+                      <br/><strong>Zero Pressure:</strong> Your tokens remain yours forever - stake only if you want extra rewards. No penalties, ever!
                     </div>
                   </div>
                 </div>
@@ -997,13 +1192,17 @@ const Home: React.FC<HomeProps> = ({
                             <span className="detail-value">${(parseFloat(amount || '0') * PRICE_FEEDS.BTC).toLocaleString()}</span>
                           </div>
                           <div className="detail-row">
-                            <span className="detail-label">BFLOW Tokens:</span>
-                            <span className="detail-value">{formatTokens(tokensToReceive)} BFLOW</span>
+                            <span className="detail-label">HL0 Tokens:</span>
+                            <span className="detail-value">{formatTokens(tokensToReceive.total)} HL0</span>
+                          </div>
+                          <div className="detail-row">
+                            <span className="detail-label">Bonus Tier:</span>
+                            <span className="detail-value">{tokensToReceive.tier.icon} {tokensToReceive.tier.label} (+{tokensToReceive.tier.bonusPercent}%)</span>
                           </div>
                           {withStaking && (
                             <div className="detail-row staking-row">
                               <span className="detail-label">🔒 Staking:</span>
-                              <span className="detail-value">Enabled (12 months)</span>
+                              <span className="detail-value">Enabled (100-1000% APR)</span>
                             </div>
                           )}
                         </div>
@@ -1065,7 +1264,6 @@ const Home: React.FC<HomeProps> = ({
                     </div>
                   </div>
                 )}
-
               </div>
 
               {/* Transaction History */}
@@ -1080,8 +1278,9 @@ const Home: React.FC<HomeProps> = ({
                             {formatCurrency(tx.amount, tx.currency)}
                           </span>
                           <span className="tx-tokens">
-                            → {formatTokens(tx.tokens)} BFLOW
+                            → {formatTokens(tx.tokens)} HL0
                           </span>
+                          <span className="tx-batch">Batch {tx.batchNumber}</span>
                           {tx.withStaking && <span className="tx-staking">🔒</span>}
                         </div>
                         <div className="tx-meta">

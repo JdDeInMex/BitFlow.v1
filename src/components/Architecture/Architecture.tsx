@@ -1,9 +1,130 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Architecture.css';
 
 const Architecture: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
-  const [selectedStep, setSelectedStep] = useState<number>(0);
+  const [visibleSection, setVisibleSection] = useState<string>('overview');
+
+  // Animation on scroll
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all animatable elements
+    const elements = document.querySelectorAll('.arch-layer, .interactive-card, .metric-card, .zero-burns-card');
+    elements.forEach(el => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Handle component selection
+  const handleComponentClick = (componentId: string) => {
+    setActiveComponent(activeComponent === componentId ? null : componentId);
+  };
+
+  // Component details data
+  const componentDetails = {
+    hyperspeed: {
+      title: "HyperSpeed Engine",
+      description: "Parallel processing with 1M+ simultaneous threads, achieving truly infinite scalability.",
+      stats: [
+        { label: "Threads", value: "1M+" },
+        { label: "Latency", value: "<1ms" },
+        { label: "TPS", value: "∞" }
+      ],
+      features: [
+        "1,000,000+ parallel threads",
+        "AI-optimized routing",
+        "Zero-knowledge proofs",
+        "Quantum entanglement sync"
+      ]
+    },
+    neural: {
+      title: "Neural Consensus (NeuCon)",
+      description: "AI-driven consensus that predicts and optimizes network performance in real-time.",
+      stats: [
+        { label: "Accuracy", value: "99.9%" },
+        { label: "Response", value: "<10ms" },
+        { label: "Learning", value: "24/7" }
+      ],
+      features: [
+        "AI-driven validation",
+        "Predictive consensus",
+        "Self-healing protocol",
+        "Energy harvesting"
+      ]
+    },
+    quantum: {
+      title: "Quantum-Safe Security",
+      description: "Post-quantum cryptography with multidimensional signatures that resist quantum computers.",
+      stats: [
+        { label: "Security", value: "Quantum" },
+        { label: "Signatures", value: "5D" },
+        { label: "Resistance", value: "100%" }
+      ],
+      features: [
+        "Lattice-based cryptography",
+        "Multi-dimensional signatures",
+        "Homomorphic encryption",
+        "Temporal key rotation"
+      ]
+    },
+    bridge: {
+      title: "Universal Bridge Protocol",
+      description: "Connects any blockchain without modifications, enabling true interoperability.",
+      stats: [
+        { label: "Chains", value: "All" },
+        { label: "Speed", value: "Instant" },
+        { label: "Security", value: "Inherited" }
+      ],
+      features: [
+        "Zero-modification integration",
+        "Cross-chain messaging",
+        "Liquidity bridging",
+        "Asset portability"
+      ]
+    },
+    contracts: {
+      title: "Smart Contracts 3.0",
+      description: "Self-evolving contracts with integrated AI that learn and optimize automatically.",
+      stats: [
+        { label: "Evolution", value: "Auto" },
+        { label: "Learning", value: "Real-time" },
+        { label: "Efficiency", value: "+1000%" }
+      ],
+      features: [
+        "AI-powered evolution",
+        "Automatic optimization",
+        "Pattern learning",
+        "Efficiency maximization"
+      ]
+    },
+    carbon: {
+      title: "Carbon Negative Infrastructure",
+      description: "Infrastructure that removes 100 tons of CO₂ per year through renewable energy.",
+      stats: [
+        { label: "CO₂ Removed", value: "-100T" },
+        { label: "Energy", value: "100% Green" },
+        { label: "Impact", value: "Positive" }
+      ],
+      features: [
+        "Proof of Green consensus",
+        "Energy recycling",
+        "Solar mining integration",
+        "Automated reforestation"
+      ]
+    }
+  };
 
   return (
     <div className="architecture-page">
@@ -12,361 +133,502 @@ const Architecture: React.FC = () => {
         <div className="hero-container">
           <div className="hero-content">
             <h1 className="hero-title">
-              Revolutionary<span className="highlight">   Architecture</span>
+              Revolutionary <span className="highlight">Layer 0</span> Architecture
             </h1>
             <p className="hero-subtitle">
-Learn about the components that make BitFlow the most advanced and scalable Layer 2 solution for Bitcoin
+              Explore the groundbreaking architecture that powers HyperLayer0 - 
+              the first Layer 0 infrastructure with Pure Utility model and zero burns forever.
             </p>
           </div>
           
           <div className="hero-visual">
             <div className="floating-diagram">
               <div className="central-core">
-                <span>BitFlow</span>
+                <span>HyperLayer0</span>
                 <div className="pulse-ring"></div>
               </div>
               <div className="orbit-layer layer-1">
-                <div className="orbit-item">Sequencer</div>
+                <div className="orbit-item">Quantum Mesh</div>
               </div>
               <div className="orbit-layer layer-2">
-                <div className="orbit-item">State Channels</div>
+                <div className="orbit-item">Neural Consensus</div>
               </div>
               <div className="orbit-layer layer-3">
-                <div className="orbit-item">ZK-STARKs</div>
+                <div className="orbit-item">Universal Bridge</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Interactive Architecture Diagram */}
-      <section className="interactive-diagram">
+      {/* Architecture Overview */}
+      <section className="overview-section">
         <div className="section-container">
-          <h2>Interactive Architecture</h2>
+          <h2>Multi-Dimensional Architecture</h2>
           <p className="section-subtitle">
-            Explore each component of the BitFlow solution by clicking on the elements below
+            HyperLayer0 operates as the connective fabric of the blockchain universe, 
+            unifying all networks while maintaining their independence and enhancing their capabilities.
           </p>
           
-          <div className="diagram-wrapper">
-            <div className="architecture-stack">
-              {/* Bitcoin Layer */}
-              <div className="arch-layer bitcoin-layer">
-                <div className="layer-header">
-                  <h3>Bitcoin Mainnet (L1)</h3>
-                  <span className="layer-badge">Settlement Layer</span>
-                </div>
-                <div className="layer-components">
-                  <div className="layer-component">
-                    <div className="component-icon bitcoin"></div>
-                    <span>Bitcoin Network</span>
-                  </div>
-                  <div className="layer-component">
-                    <div className="component-icon security"></div>
-                    <span>Security & Finality</span>
-                  </div>
-                </div>
+          <div className="architecture-stack">
+            {/* Applications Layer */}
+            <div className="arch-layer layer-applications">
+              <div className="layer-header">
+                <h3>🚀 Applications & dApps</h3>
+                <span className="layer-badge">User Interface Layer</span>
               </div>
-
-              {/* BitFlow Layer */}
-              <div className="arch-layer bitflow-layer">
-                <div className="layer-header">
-                  <h3>BitFlow Layer 2</h3>
-                  <span className="layer-badge">Execution Layer</span>
+              <div className="layer-components">
+                <div className="layer-component">
+                  <div className="component-icon dapps">🎮</div>
+                  <span>GameFi & Metaverse</span>
                 </div>
-                <div className="layer-components">
-                  <div 
-                    className={`layer-component interactive ${activeComponent === 'sequencer' ? 'active' : ''}`}
-                    onClick={() => setActiveComponent(activeComponent === 'sequencer' ? null : 'sequencer')}
-                  >
-                    <div className="component-icon sequencer"></div>
-                    <span>BitFlow Sequencer</span>
-                    <div className="glow-effect"></div>
-                  </div>
-                  <div 
-                    className={`layer-component interactive ${activeComponent === 'channels' ? 'active' : ''}`}
-                    onClick={() => setActiveComponent(activeComponent === 'channels' ? null : 'channels')}
-                  >
-                    <div className="component-icon channels"></div>
-                    <span>State Channels</span>
-                    <div className="glow-effect"></div>
-                  </div>
-                  <div 
-                    className={`layer-component interactive ${activeComponent === 'zk' ? 'active' : ''}`}
-                    onClick={() => setActiveComponent(activeComponent === 'zk' ? null : 'zk')}
-                  >
-                    <div className="component-icon zk"></div>
-                    <span>ZK-STARKs</span>
-                    <div className="glow-effect"></div>
-                  </div>
+                <div className="layer-component">
+                  <div className="component-icon dapps">💰</div>
+                  <span>DeFi Protocols</span>
                 </div>
-              </div>
-
-              {/* Application Layer */}
-              <div className="arch-layer app-layer">
-                <div className="layer-header">
-                  <h3>Application Layer</h3>
-                  <span className="layer-badge">dApps & Protocols</span>
+                <div className="layer-component">
+                  <div className="component-icon dapps">🎨</div>
+                  <span>NFT Platforms</span>
                 </div>
-                <div className="layer-components">
-                  <div className="layer-component">
-                    <div className="component-icon defi"></div>
-                    <span>DeFi Protocols</span>
-                  </div>
-                  <div className="layer-component">
-                    <div className="component-icon gaming"></div>
-                    <span>Gaming dApps</span>
-                  </div>
-                  <div className="layer-component">
-                    <div className="component-icon nft"></div>
-                    <span>NFT Platforms</span>
-                  </div>
-                  <div className="layer-component">
-                    <div className="component-icon metaverse"></div>
-                    <span>Metaverse</span>
-                  </div>
+                <div className="layer-component">
+                  <div className="component-icon dapps">🏥</div>
+                  <span>Real World Apps</span>
                 </div>
               </div>
             </div>
 
-            {/* Component Details Panel */}
-            <div className={`component-details ${activeComponent ? 'visible' : ''}`}>
-              {activeComponent === 'sequencer' && (
-                <div className="detail-content">
-                  <h3>BitFlow Sequencer</h3>
-                  <p>The heart of the system that orders and processes transactions</p>
-                  <div className="detail-stats">
-                    <div className="stat">
-                      <span className="stat-number">50,000+</span>
-                      <span className="stat-label">TPS</span>
-                    </div>
-                    <div className="stat">
-                      <span className="stat-number">&lt;100ms</span>
-                      <span className="stat-label">Latency</span>
-                    </div>
-                    <div className="stat">
-                      <span className="stat-number">99.9%</span>
-                      <span className="stat-label">Uptime</span>
-                    </div>
-                  </div>
-                  <ul className="detail-features">
-                    <li>Optimized Proof-of-Stake consensus</li>
-                    <li>Parallel transaction processing</li>
-                    <li>Censorship resistance</li>
-                    <li>Deterministic finality</li>
-                  </ul>
+            {/* Smart Contracts Layer */}
+            <div className="arch-layer layer-contracts">
+              <div className="layer-header">
+                <h3>🧠 Smart Contracts 3.0</h3>
+                <span className="layer-badge">Intelligence Layer</span>
+              </div>
+              <div className="layer-components">
+                <div 
+                  className={`layer-component interactive ${activeComponent === 'contracts' ? 'active' : ''}`}
+                  onClick={() => handleComponentClick('contracts')}
+                >
+                  <div className="component-icon smart-contracts">🤖</div>
+                  <span>AI-Driven Contracts</span>
+                  <div className="glow-effect"></div>
                 </div>
-              )}
-              
-              {activeComponent === 'channels' && (
-                <div className="detail-content">
-                  <h3>State Channels Network</h3>
-                  <p>Channel network for instant transactions</p>
-                  <div className="detail-stats">
-                    <div className="stat">
-                      <span className="stat-number">Instant</span>
-                      <span className="stat-label">Settlement</span>
-                    </div>
-                    <div className="stat">
-                      <span className="stat-number">0.001</span>
-                      <span className="stat-label">Sats Fee</span>
-                    </div>
-                    <div className="stat">
-                      <span className="stat-number">∞</span>
-                      <span className="stat-label">Scalability</span>
-                    </div>
-                  </div>
-                  <ul className="detail-features">
-                    <li>Viable micropayments</li>
-                    <li>Automatic payment routing</li>
-                    <li>Shared liquidity pool</li>
-                    <li>Secure channel closure</li>
-                  </ul>
+                <div className="layer-component">
+                  <div className="component-icon smart-contracts">🔄</div>
+                  <span>Self-Evolving Logic</span>
                 </div>
-              )}
-              
-              {activeComponent === 'zk' && (
-                <div className="detail-content">
-                  <h3>ZK-STARK Proofs</h3>
-                  <p>Zero-knowledge proofs for maximum security</p>
-                  <div className="detail-stats">
-                    <div className="stat">
-                      <span className="stat-number">Zero</span>
-                      <span className="stat-label">Knowledge</span>
-                    </div>
-                    <div className="stat">
-                      <span className="stat-number">Quantum</span>
-                      <span className="stat-label">Resistant</span>
-                    </div>
-                    <div className="stat">
-                      <span className="stat-number">100%</span>
-                      <span className="stat-label">Verified</span>
-                    </div>
-                  </div>
-                  <ul className="detail-features">
-                    <li>Mathematical verification of transactions</li>
-                    <li>Optional privacy preserved</li>
-                    <li>Quantum attack resistance</li>
-                    <li>Efficient data compression</li>
-                  </ul>
+                <div className="layer-component">
+                  <div className="component-icon smart-contracts">🔐</div>
+                  <span>Zero-Knowledge Proofs</span>
                 </div>
-              )}
+                <div className="layer-component">
+                  <div className="component-icon smart-contracts">⚙️</div>
+                  <span>Auto-Optimization</span>
+                </div>
+              </div>
+            </div>
+
+            {/* HyperLayer0 Protocol */}
+            <div className="arch-layer layer-hyperlayer0">
+              <div className="layer-header">
+                <h3>⚡ HyperLayer0 Protocol</h3>
+                <span className="layer-badge">Core Infrastructure</span>
+              </div>
+              <div className="layer-components">
+                <div 
+                  className={`layer-component interactive ${activeComponent === 'hyperspeed' ? 'active' : ''}`}
+                  onClick={() => handleComponentClick('hyperspeed')}
+                >
+                  <div className="component-icon hyperspeed">🚄</div>
+                  <span>HyperSpeed Engine</span>
+                  <div className="glow-effect"></div>
+                </div>
+                <div className="layer-component">
+                  <div className="component-icon hyperspeed">🔗</div>
+                  <span>Dynamic Sharding</span>
+                </div>
+                <div className="layer-component">
+                  <div className="component-icon hyperspeed">💡</div>
+                  <span>State Channels Matrix</span>
+                </div>
+                <div className="layer-component">
+                  <div className="component-icon hyperspeed">🌊</div>
+                  <span>Plasma++ Networks</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Quantum Mesh Network */}
+            <div className="arch-layer layer-quantum">
+              <div className="layer-header">
+                <h3>🔬 Quantum Mesh Network (QMN)</h3>
+                <span className="layer-badge">Synchronization Layer</span>
+              </div>
+              <div className="layer-components">
+                <div 
+                  className={`layer-component interactive ${activeComponent === 'neural' ? 'active' : ''}`}
+                  onClick={() => handleComponentClick('neural')}
+                >
+                  <div className="component-icon neural">🧬</div>
+                  <span>Neural Consensus</span>
+                  <div className="glow-effect"></div>
+                </div>
+                <div 
+                  className={`layer-component interactive ${activeComponent === 'quantum' ? 'active' : ''}`}
+                  onClick={() => handleComponentClick('quantum')}
+                >
+                  <div className="component-icon quantum">⚛️</div>
+                  <span>Quantum Entanglement</span>
+                  <div className="glow-effect"></div>
+                </div>
+                <div className="layer-component">
+                  <div className="component-icon neural">🔮</div>
+                  <span>Predictive Validation</span>
+                </div>
+                <div className="layer-component">
+                  <div className="component-icon quantum">🛡️</div>
+                  <span>Self-Healing Protocol</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Universal Bridge Protocol */}
+            <div className="arch-layer layer-bridge">
+              <div className="layer-header">
+                <h3>🌉 Universal Bridge Protocol</h3>
+                <span className="layer-badge">Interoperability Layer</span>
+              </div>
+              <div className="layer-components">
+                <div 
+                  className={`layer-component interactive ${activeComponent === 'bridge' ? 'active' : ''}`}
+                  onClick={() => handleComponentClick('bridge')}
+                >
+                  <div className="component-icon universal">🔄</div>
+                  <span>Cross-Chain Messaging</span>
+                  <div className="glow-effect"></div>
+                </div>
+                <div className="layer-component">
+                  <div className="component-icon universal">💧</div>
+                  <span>Liquidity Bridging</span>
+                </div>
+                <div className="layer-component">
+                  <div className="component-icon universal">🎯</div>
+                  <span>Asset Portability</span>
+                </div>
+                <div className="layer-component">
+                  <div className="component-icon universal">🔒</div>
+                  <span>Security Inheritance</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Blockchains Layer */}
+            <div className="arch-layer layer-blockchains">
+              <div className="layer-header">
+                <h3>⛓️ Connected Blockchains</h3>
+                <span className="layer-badge">Foundation Layer</span>
+              </div>
+              <div className="layer-components">
+                <div className="layer-component">
+                  <div className="component-icon bitcoin">₿</div>
+                  <span>Bitcoin</span>
+                </div>
+                <div className="layer-component">
+                  <div className="component-icon ethereum">Ξ</div>
+                  <span>Ethereum</span>
+                </div>
+                <div className="layer-component">
+                  <div className="component-icon cosmos">⚛️</div>
+                  <span>Cosmos</span>
+                </div>
+                <div className="layer-component">
+                  <div className="component-icon ethereum">∞</div>
+                  <span>All Chains</span>
+                </div>
+              </div>
             </div>
           </div>
+
+          {/* Component Details Panel */}
+          {activeComponent && componentDetails[activeComponent as keyof typeof componentDetails] && (
+            <div className="component-details visible">
+              <div className="detail-content">
+                <h3>{componentDetails[activeComponent as keyof typeof componentDetails].title}</h3>
+                <p>{componentDetails[activeComponent as keyof typeof componentDetails].description}</p>
+                
+                <div className="detail-stats">
+                  {componentDetails[activeComponent as keyof typeof componentDetails].stats.map((stat, index) => (
+                    <div key={index} className="stat">
+                      <span className="stat-number">{stat.value}</span>
+                      <span className="stat-label">{stat.label}</span>
+                    </div>
+                  ))}
+                </div>
+                
+                <ul className="detail-features">
+                  {componentDetails[activeComponent as keyof typeof componentDetails].features.map((feature, index) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Transaction Flow */}
-      <section className="transaction-flow">
+      {/* Revolutionary Technologies */}
+      <section className="interactive-components">
         <div className="section-container">
-          <h2>Transaction Flow</h2>
+          <h2>Revolutionary Technologies</h2>
           <p className="section-subtitle">
-            Follow the path of a transaction from submission to finalization
+            Dive deep into the groundbreaking technologies that make HyperLayer0 
+            the most advanced blockchain infrastructure ever created.
           </p>
           
-          <div className="flow-timeline">
-            {[
-              {
-                title: "Submission",
-                description: "User sends transaction",
-                time: "✓",
-                details: "The transaction is sent to the BitFlow Sequencer through the user interface"
-              },
-              {
-                title: "Validation",
-                description: "Signature and balance verification",
-                time: "✓",
-                details: "The Sequencer validates the digital signature and verifies sufficient balance"
-              },
-              {
-                title: "Batching",
-                description: "Grouping with other transactions",
-                time: "✓",
-                details: "The transaction is grouped with others in a batch for maximum efficiency"
-              },
-              {
-                title: "ZK Proof",
-                description: "Mathematical proof generation",
-                time: "✓",
-                details: "ZK-STARK system generates cryptographic proof of batch validity"
-              },
-              {
-                title: "L2 Finality",
-                description: "Layer 2 confirmation",
-                time: "✓",
-                details: "Transaction is confirmed on BitFlow L2 with cryptographic guarantees"
-              },
-              {
-                title: "L1 Settlement",
-                description: "Bitcoin mainnet settlement",
-                time: "✓",
-                details: "Proofs are periodically submitted to the main Bitcoin network"
-              }
-            ].map((step, index) => (
-              <div 
-                key={index}
-                className={`flow-step ${selectedStep === index ? 'active' : ''}`}
-                onClick={() => setSelectedStep(index)}
-              >
-                <div className="step-number">{index + 1}</div>
-                <div className="step-content">
-                  <h4>{step.title}</h4>
-                  <p>{step.description}</p>
-                  <span className="step-time">{step.time}</span>
+          <div className="components-grid">
+            <div className="interactive-card">
+              <div className="card-header">
+                <div className="card-icon hyperspeed">⚡</div>
+                <div className="card-content">
+                  <h3>HyperSpeed Engine</h3>
                 </div>
-                <div className="step-details">
-                  {step.details}
-                </div>
-                {index < 5 && <div className="step-connector"></div>}
               </div>
-            ))}
+              <p className="card-description">
+                Parallel processing with 1M+ simultaneous threads, achieving truly infinite scalability.
+              </p>
+              <ul className="card-features">
+                <li>1,000,000+ parallel threads</li>
+                <li>AI-optimized routing</li>
+                <li>Zero-knowledge proofs</li>
+                <li>Quantum entanglement sync</li>
+              </ul>
+            </div>
+
+            <div className="interactive-card">
+              <div className="card-header">
+                <div className="card-icon neural">🧠</div>
+                <div className="card-content">
+                  <h3>Neural Consensus (NeuCon)</h3>
+                </div>
+              </div>
+              <p className="card-description">
+                AI-driven consensus that predicts and optimizes network performance in real-time.
+              </p>
+              <ul className="card-features">
+                <li>AI-driven validation</li>
+                <li>Predictive consensus</li>
+                <li>Self-healing protocol</li>
+                <li>Energy harvesting</li>
+              </ul>
+            </div>
+
+            <div className="interactive-card">
+              <div className="card-header">
+                <div className="card-icon quantum">🔬</div>
+                <div className="card-content">
+                  <h3>Quantum-Safe Security</h3>
+                </div>
+              </div>
+              <p className="card-description">
+                Post-quantum cryptography with multidimensional signatures that resist quantum computers.
+              </p>
+              <ul className="card-features">
+                <li>Lattice-based cryptography</li>
+                <li>Multi-dimensional signatures</li>
+                <li>Homomorphic encryption</li>
+                <li>Temporal key rotation</li>
+              </ul>
+            </div>
+
+            <div className="interactive-card">
+              <div className="card-header">
+                <div className="card-icon universal">🌉</div>
+                <div className="card-content">
+                  <h3>Universal Bridge Protocol</h3>
+                </div>
+              </div>
+              <p className="card-description">
+                Connects any blockchain without modifications, enabling true interoperability.
+              </p>
+              <ul className="card-features">
+                <li>Zero-modification integration</li>
+                <li>Cross-chain messaging</li>
+                <li>Liquidity bridging</li>
+                <li>Asset portability</li>
+              </ul>
+            </div>
+
+            <div className="interactive-card">
+              <div className="card-header">
+                <div className="card-icon smart-contracts">🤖</div>
+                <div className="card-content">
+                  <h3>Smart Contracts 3.0</h3>
+                </div>
+              </div>
+              <p className="card-description">
+                Self-evolving contracts with integrated AI that learn and optimize automatically.
+              </p>
+              <ul className="card-features">
+                <li>AI-powered evolution</li>
+                <li>Automatic optimization</li>
+                <li>Pattern learning</li>
+                <li>Efficiency maximization</li>
+              </ul>
+            </div>
+
+            <div className="interactive-card">
+              <div className="card-header">
+                <div className="card-icon dapps">🌱</div>
+                <div className="card-content">
+                  <h3>Carbon Negative Infrastructure</h3>
+                </div>
+              </div>
+              <p className="card-description">
+                Infrastructure that removes 100 tons of CO₂ per year through renewable energy.
+              </p>
+              <ul className="card-features">
+                <li>Proof of Green consensus</li>
+                <li>Energy recycling</li>
+                <li>Solar mining integration</li>
+                <li>Automated reforestation</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Performance Metrics */}
-      <section className="performance-metrics">
+      <section className="performance-section">
         <div className="section-container">
-          <h2>Performance in Numbers</h2>
+          <h2>Performance Excellence</h2>
           <p className="section-subtitle">
-            Metrics that demonstrate BitFlow's technical superiority
+            Numbers that demonstrate HyperLayer0's revolutionary performance and efficiency.
           </p>
           
           <div className="metrics-grid">
             <div className="metric-card">
-              <div className="metric-icon throughput"></div>
-              <div className="metric-value">50,000+</div>
+              <div className="metric-icon tps">⚡</div>
+              <div className="metric-value">∞</div>
               <div className="metric-label">Transactions per Second</div>
               <div className="metric-comparison">
-                vs. Bitcoin: <span className="improvement">7,142x</span> faster
+                Truly infinite scalability through <span className="improvement">dynamic sharding</span>
               </div>
             </div>
             
             <div className="metric-card">
-              <div className="metric-icon cost"></div>
-              <div className="metric-value">0.001</div>
-              <div className="metric-label">Sats per Transaction</div>
+              <div className="metric-icon cost">💰</div>
+              <div className="metric-value">$0.00001</div>
+              <div className="metric-label">Cost per Transaction</div>
               <div className="metric-comparison">
-                vs. Bitcoin: <span className="improvement">99.9%</span> cheaper
+                <span className="improvement">99.999%</span> cheaper than traditional blockchains
               </div>
             </div>
             
             <div className="metric-card">
-              <div className="metric-icon finality"></div>
-              <div className="metric-value">&lt;1s</div>
+              <div className="metric-icon finality">⏱️</div>
+              <div className="metric-value">&lt;0.001s</div>
               <div className="metric-label">Finality Time</div>
               <div className="metric-comparison">
-                vs. Bitcoin: <span className="improvement">3,600x</span> faster
+                Sub-millisecond <span className="improvement">instant finality</span>
               </div>
             </div>
             
             <div className="metric-card">
-              <div className="metric-icon energy"></div>
-              <div className="metric-value">99.9%</div>
-              <div className="metric-label">Energy Reduction</div>
+              <div className="metric-icon energy">🌱</div>
+              <div className="metric-value">-100</div>
+              <div className="metric-label">Tons CO₂ Removed/Year</div>
               <div className="metric-comparison">
-                <span className="improvement">Sustainable</span> efficiency
+                <span className="improvement">Carbon negative</span> infrastructure
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Security Model */}
-      <section className="security-model">
+      {/* Zero Burns Section */}
+      <section className="zero-burns-section">
         <div className="section-container">
-          <h2>Security Model</h2>
+          <h2>Pure Utility Model</h2>
           <p className="section-subtitle">
-            Multiple layers of protection ensure the security of your funds
+            HyperLayer0 introduces the revolutionary "Pure Utility" model - 
+            ZERO burns on everything, maximum freedom for users.
           </p>
           
-          <div className="security-layers">
-            <div className="security-layer">
-              <div className="security-icon bitcoin-security"></div>
-              <h3>Bitcoin Inheritance</h3>
-              <p>Base security from the Bitcoin network with over 15 years of uninterrupted operation</p>
-              <ul>
-                <li>Proof-of-Work with 400+ EH/s</li>
-                <li>Global decentralization</li>
-                <li>Proven immutability</li>
-                <li>Censorship resistance</li>
-              </ul>
+          <div className="zero-burns-grid">
+            <div className="zero-burns-card">
+              <div className="burns-icon">🔄</div>
+              <div className="burns-value">0%</div>
+              <div className="burns-label">Transaction Burns</div>
+              <div className="burns-description">
+                Free transactions forever - your tokens stay yours
+              </div>
             </div>
             
-            <div className="security-layer">
-              <div className="security-icon cryptographic"></div>
-              <h3>Cryptographic Proofs</h3>
-              <p>ZK-STARKs provide mathematical verification without revealing private information</p>
-              <ul>
-                <li>Zero-knowledge proofs</li>
-                <li>Deterministic verification</li>
-                <li>Quantum resistance</li>
-                <li>Logarithmic scalability</li>
-              </ul>
+            <div className="zero-burns-card">
+              <div className="burns-icon">🌉</div>
+              <div className="burns-value">0%</div>
+              <div className="burns-label">Bridge Burns</div>
+              <div className="burns-description">
+                Free cross-chain transfers without any penalties
+              </div>
+            </div>
+            
+            <div className="zero-burns-card">
+              <div className="burns-icon">🔒</div>
+              <div className="burns-value">0%</div>
+              <div className="burns-label">Staking Penalties</div>
+              <div className="burns-description">
+                Stake only if you want - no pressure, no burns
+              </div>
+            </div>
+            
+            <div className="zero-burns-card">
+              <div className="burns-icon">💎</div>
+              <div className="burns-value">9.9B</div>
+              <div className="burns-label">Forever Supply</div>
+              <div className="burns-description">
+                Stable token supply - value through utility, not scarcity
+              </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="architecture-cta">
+        <div className="cta-container">
+          <div className="cta-content">
+            <h2>Experience the Future</h2>
+            <p>
+              Join the revolution and be part of building the infrastructure 
+              that will power the next era of human civilization.
+            </p>
+            <div className="cta-buttons">
+              <button 
+                className="primary-button"
+                onClick={() => {
+                  if (window.location.pathname === '/') {
+                    const event = new CustomEvent('navigate', { detail: 'home' });
+                    window.dispatchEvent(event);
+                  } else {
+                    window.location.href = '/';
+                  }
+                }}
+              >
+                Join the Presale
+              </button>
+              <button 
+                className="secondary-button"
+                onClick={() => {
+                  const event = new CustomEvent('navigate', { detail: 'whitepaper' });
+                  window.dispatchEvent(event);
+                }}
+              >
+                Read Whitepaper
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

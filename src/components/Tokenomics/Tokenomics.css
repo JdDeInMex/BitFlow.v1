@@ -1,0 +1,14 @@
+/* src/components/Tokenomics/Tokenomics.css */
+
+/* Este arquivo pode importar estilos adicionais se necessário */
+/* Os estilos principais já estão injetados no TokenomicsPage component */
+
+.tokenomics-container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Sobrescrever estilos globais se necessário */
+.tokenomics-page {
+  padding-top: 80px; /* Ajustar para o header fixo */
+}

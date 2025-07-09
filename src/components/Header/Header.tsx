@@ -9,7 +9,7 @@ import { useAppKit } from '@reown/appkit/react';
 import './Header.css';
 
 // Constants
-const PROJECT_ID = '9b890db3767b4ddae3e99351d516e9a1'; // Usando o ID do segundo código que funciona
+const PROJECT_ID = '9b890db3767b4ddae3e99351d516e9a1';
 
 // Singleton QueryClient
 const queryClient = new QueryClient({
@@ -21,10 +21,10 @@ const queryClient = new QueryClient({
   },
 });
 
-// App metadata
+// App metadata - UPDATED FOR HYPERLAYER0
 const METADATA = {
-  name: 'BitFlow',
-  description: 'The Future of Bitcoin DeFi',
+  name: 'HyperLayer0',
+  description: 'The Future of Pure Utility Infrastructure',
   url: typeof window !== 'undefined' ? window.location.origin : '',
   icons: [`${typeof window !== 'undefined' ? window.location.origin : ''}/favicon.ico`]
 };
@@ -36,7 +36,7 @@ const wagmiAdapter = new WagmiAdapter({
   ssr: false
 });
 
-// Create modal
+// Create modal with HyperLayer0 theme
 createAppKit({
   adapters: [wagmiAdapter],
   networks: [mainnet, arbitrum, polygon, bsc],
@@ -47,9 +47,9 @@ createAppKit({
   },
   themeMode: 'dark',
   themeVariables: {
-    '--w3m-color-mix': '#f7931a',
+    '--w3m-color-mix': '#00ff88', // HyperLayer0 green
     '--w3m-color-mix-strength': 20,
-    '--w3m-accent': '#f7931a',
+    '--w3m-accent': '#00ff88',
     '--w3m-border-radius-master': '8px',
   }
 });
@@ -70,10 +70,11 @@ interface NavigationItem {
   icon?: string;
 }
 
-// Navigation items
+// Navigation items - UPDATED WITH TOKENOMICS
 const NAVIGATION_ITEMS: NavigationItem[] = [
   { key: 'home', label: 'Home', icon: '🏠' },
   { key: 'about', label: 'About', icon: 'ℹ️' },
+  { key: 'tokenomics', label: 'Tokenomics', icon: '💎' }, // NOVA ABA
   { key: 'architecture', label: 'Architecture', icon: '🏗️' },
   { key: 'use-cases', label: 'Use Cases', icon: '💡' },
   { key: 'roadmap', label: 'Roadmap', icon: '🗺️' }
@@ -106,22 +107,37 @@ const formatBalance = (balance: any): string => {
   return `${formatted} ${balance.symbol}`;
 };
 
-// Logo component
+// Logo component - UPDATED FOR HYPERLAYER0
 const Logo: React.FC<{ onClick: () => void }> = React.memo(({ onClick }) => (
   <div className="header-logo" onClick={onClick}>
     <div className="logo-icon">
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
         <defs>
           <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#f7931a" />
-            <stop offset="100%" stopColor="#ff8c00" />
+            <stop offset="0%" stopColor="#00ff88" />
+            <stop offset="50%" stopColor="#00ccff" />
+            <stop offset="100%" stopColor="#ff6b35" />
           </linearGradient>
         </defs>
         <circle cx="16" cy="16" r="14" fill="url(#logoGradient)" />
-        <text x="16" y="20" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">₿</text>
+        <path 
+          d="M10 12 L16 8 L22 12 L16 16 Z" 
+          fill="white" 
+          opacity="0.9"
+        />
+        <path 
+          d="M10 16 L16 12 L22 16 L16 20 Z" 
+          fill="white" 
+          opacity="0.7"
+        />
+        <path 
+          d="M10 20 L16 16 L22 20 L16 24 Z" 
+          fill="white" 
+          opacity="0.5"
+        />
       </svg>
     </div>
-    <span className="logo-text">BitFlow</span>
+    <span className="logo-text">HyperLayer0</span>
   </div>
 ));
 
@@ -309,7 +325,7 @@ const HeaderContent: React.FC<HeaderProps> = ({
   
   const { address, isConnected: wagmiConnected, connector } = useAccount();
   const { disconnect } = useDisconnect();
-  const { open } = useAppKit(); // Mudança aqui: useAppKit ao invés de useWeb3Modal
+  const { open } = useAppKit();
   
   // Fetch ETH balance
   const { data: balance } = useBalance({
@@ -355,7 +371,7 @@ const HeaderContent: React.FC<HeaderProps> = ({
     }
   }, [navigateToPage]);
 
-  // Handle wallet connection - SIMPLIFICADO PARA FUNCIONAR
+  // Handle wallet connection
   const handleConnectWallet = useCallback(async () => {
     try {
       await open();
