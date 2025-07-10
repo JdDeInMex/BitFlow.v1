@@ -55,7 +55,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
       <div className="countdown-display-main">
         <div className="time-segment">
           <div className="time-value">{formattedHours}</div>
-          <div className="time-label">Horas</div>
+          <div className="time-label">Hours</div>
         </div>
         
         <div className="time-separator">:</div>
@@ -69,7 +69,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
         
         <div className="time-segment">
           <div className="time-value">{formattedSeconds}</div>
-          <div className="time-label">Seg</div>
+          <div className="time-label">Sec</div>
         </div>
       </div>
       
@@ -81,21 +81,21 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
       </div>
       
       <div className="apy-info-compact">
-        <span className="apy-current">APY Atual: <strong>{currentAPY}%</strong></span>
-        <span className="apy-warning">Disponível até Lote 2</span>
+        <span className="apy-current">Current APY: <strong>{currentAPY}%</strong></span>
+        <span className="apy-warning">Available until Batch 2</span>
       </div>
       
       {isCritical && (
         <div className="critical-badge">
           <span className="critical-icon">🚨</span>
-          <span className="critical-text">ÚLTIMOS MINUTOS!</span>
+          <span className="critical-text">FINAL MINUTES!</span>
         </div>
       )}
       
       {isUrgent && !isCritical && (
         <div className="urgent-badge">
           <span className="urgent-icon">⚡</span>
-          <span className="urgent-text">ÚLTIMAS HORAS!</span>
+          <span className="urgent-text">FINAL HOURS!</span>
         </div>
       )}
     </div>
@@ -189,11 +189,11 @@ const DAILY_PRICE_INCREASE = 0.00001;
 const STAKING_MIN_PERIOD_DAYS = 30;
 const MAX_SLIPPAGE_PERCENT = 3;
 
-// Enhanced Bonus structure with more visual appeal
+// Enhanced Bonus structure with more visual appeal - CORRECTED & SUSTAINABLE
 const BONUS_STRUCTURE: BonusStructure[] = [
   { 
     minUSD: 50000, 
-    bonusPercent: 150, 
+    bonusPercent: 100, 
     label: "Blue Whale Tier", 
     icon: "🐋", 
     color: "#1E40AF",
@@ -201,7 +201,7 @@ const BONUS_STRUCTURE: BonusStructure[] = [
   },
   { 
     minUSD: 25000, 
-    bonusPercent: 120, 
+    bonusPercent: 80, 
     label: "Orca Tier", 
     icon: "🐋", 
     color: "#2563EB",
@@ -209,7 +209,7 @@ const BONUS_STRUCTURE: BonusStructure[] = [
   },
   { 
     minUSD: 10000, 
-    bonusPercent: 100, 
+    bonusPercent: 60, 
     label: "Whale Tier", 
     icon: "🐋", 
     color: "#3B82F6",
@@ -217,7 +217,7 @@ const BONUS_STRUCTURE: BonusStructure[] = [
   },
   { 
     minUSD: 5000, 
-    bonusPercent: 75, 
+    bonusPercent: 45, 
     label: "Shark Tier", 
     icon: "🦈", 
     color: "#10B981",
@@ -225,7 +225,7 @@ const BONUS_STRUCTURE: BonusStructure[] = [
   },
   { 
     minUSD: 2000, 
-    bonusPercent: 50, 
+    bonusPercent: 30, 
     label: "Dolphin Tier", 
     icon: "🐬", 
     color: "#059669",
@@ -233,7 +233,7 @@ const BONUS_STRUCTURE: BonusStructure[] = [
   },
   { 
     minUSD: 500, 
-    bonusPercent: 25, 
+    bonusPercent: 15, 
     label: "Fish Tier", 
     icon: "🐟", 
     color: "#0D9488",
@@ -241,7 +241,7 @@ const BONUS_STRUCTURE: BonusStructure[] = [
   },
   { 
     minUSD: 0, 
-    bonusPercent: 10, 
+    bonusPercent: 5, 
     label: "Shrimp Tier", 
     icon: "🦐", 
     color: "#6B7280",
@@ -259,18 +259,18 @@ const getBonusForAmount = (usdAmount: number): BonusStructure => {
   return BONUS_STRUCTURE[BONUS_STRUCTURE.length - 1];
 };
 
-// Enhanced batch data with real current values
+// Enhanced batch data with real current values - CORRECTED FOR SUSTAINABILITY
 const INITIAL_BATCH_DATA: CurrentBatch = {
   batchNumber: 1,
-  priceUSD: 0.00900,
+  priceUSD: 0.0090000,
   phase: "Early Innovation",
-  basePrice: 0.00900,
-  tokensTotal: 400000000,
+  basePrice: 0.0090000,
+  tokensTotal: 200000000, // Reduced from 400M for better distribution
   tokensSold: 1100, // Real tokens sold
   daysElapsed: 1, // Days since start
-  maxBonus: 150,
+  maxBonus: 100, // Reduced from 150% to sustainable 100%
   apyRate: 1000,
-  nextBatchPrice: 0.009012,
+  nextBatchPrice: 0.0150000, // Next batch price (Batch 2)
   endDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000) // 15 days remaining
 };
 
@@ -453,7 +453,7 @@ const formatCurrency = (amount: number, currency: string) =>
   })} ${currency}`;
 
 const formatUSD = (amount: number, precision?: number) => {
-  // Para valores muito pequenos (menores que $0.01), usar até 7 casas decimais
+  // For very small values (smaller than $0.01), use up to 7 decimal places
   const defaultPrecision = amount < 0.01 ? 7 : 2;
   const fractionDigits = precision !== undefined ? precision : defaultPrecision;
   
@@ -482,27 +482,28 @@ const sendWhatsAppNotification = async (
   txHash?: string
 ) => {
   const shortWallet = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
-  const timestamp = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
   
-  const message = `🚀 *NOVA COMPRA HYPERLAYER0* 🚀
+  const message = `🚀 *NEW HYPERLAYER0 PURCHASE* 🚀
 
-💼 *Carteira:* ${shortWallet}
-💰 *Valor:* ${formatCurrency(amount, currency)}
-💵 *Valor USD:* ${formatUSD(usdValue)}
-🪙 *Tokens Base:* ${formatTokens(tokens - bonusTokens)} HL0
-🎁 *Tokens Bônus:* ${formatTokens(bonusTokens)} HL0 (${tier.bonusPercent}%)
+💼 *Wallet:* ${shortWallet}
+💰 *Amount:* ${formatCurrency(amount, currency)}
+💵 *USD Value:* ${formatUSD(usdValue)}
+🪙 *Base Tokens:* ${formatTokens(tokens - bonusTokens)} HL0
+🎁 *Bonus Tokens:* ${formatTokens(bonusTokens)} HL0 (${tier.bonusPercent}%)
 🏆 *Total HL0:* ${formatTokens(tokens)} HL0
 📈 *Tier:* ${tier.icon} ${tier.label}
-📦 *Lote:* ${batchNumber} (${INITIAL_BATCH_DATA.phase})
-${withStaking ? '🔒 *COM STAKING ATIVADO (1000% APR)*' : '💫 *SEM STAKING*'}
-🌐 *Rede:* ${NETWORKS[Object.keys(NETWORKS).find(k => CURRENCIES[currency]?.networks.includes(k)) || 'ethereum']?.name}
+📦 *Batch:* ${batchNumber} (${INITIAL_BATCH_DATA.phase})
+${withStaking ? '🔒 *WITH STAKING ACTIVATED (1000% APR)*' : '💫 *WITHOUT STAKING*'}
+🌐 *Network:* ${NETWORKS[Object.keys(NETWORKS).find(k => CURRENCIES[currency]?.networks.includes(k)) || 'ethereum']?.name}
 ${txHash ? `🔗 *TX Hash:* ${txHash.slice(0, 10)}...${txHash.slice(-8)}` : ''}
 
-💡 *PREÇO ATUAL:* ${formatUSD(getCurrentBatchPrice(INITIAL_BATCH_DATA))}
-📈 *PRÓXIMO LOTE:* ${formatUSD(INITIAL_BATCH_DATA.nextBatchPrice)}
-⏰ *Aumento diário:* +$0.00001
+💡 *CURRENT PRICE:* ${formatUSD(getCurrentBatchPrice(INITIAL_BATCH_DATA), 7)}
+📈 *NEXT BATCH:* ${formatUSD(INITIAL_BATCH_DATA.nextBatchPrice, 3)}
+🚀 *LAUNCH TARGET:* $1.20 (133x from current)
+⏰ *Daily increase:* +$0.00001
 
-⏰ *Horário:* ${timestamp}
+⏰ *Time:* ${timestamp}
 
 #HyperLayer0 #Web3 #Layer0 #PureUtility #${tier.label.replace(' ', '')}`;
 
@@ -1211,64 +1212,64 @@ const Home: React.FC<HomeProps> = ({
               <div className="banner-content">
                 <div className="banner-icon animated">💰</div>
                 <div className="banner-text">
-                  <span className="banner-title">10000%+ GARANTIDO!</span>
+                  <span className="banner-title">10000%+ GUARANTEED!</span>
                   <span className="banner-subtitle">
-                    {formatUSD(0.009)} → {formatUSD(0.90)} Launch • 100x Mínimo Garantido
+                    {formatUSD(0.0090000, 7)} → {formatUSD(1.20)} Launch • 100x Minimum Guaranteed
                   </span>
                 </div>
                 <div className="banner-stats">
                   <div className="stat-item">
                     <span className="stat-number">{formatTokens(currentBatch.tokensSold)}</span>
-                    <span className="stat-label">Tokens Vendidos</span>
+                    <span className="stat-label">Tokens Sold</span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-number">{currentBatch.maxBonus}%</span>
-                    <span className="stat-label">Bônus Máximo</span>
+                    <span className="stat-label">Max Bonus</span>
                   </div>
                 </div>
               </div>
             </div>
             
             <h1>
-              O Futuro da Infraestrutura de <span className="highlight">Utilidade Pura</span>
+              The Future of <span className="highlight">Pure Utility</span> Infrastructure
             </h1>
             
             <p>
-              <strong>HyperLayer0</strong> introduz o revolucionário modelo "Pure Utility" - 
-              a primeira Layer 0 com ZERO queimas em tudo. Seus tokens, sua escolha, para sempre. 
-              Valor através de utilidade genuína, não escassez artificial.
+              <strong>HyperLayer0</strong> introduces the revolutionary "Pure Utility" model - 
+              the first Layer 0 with ZERO burns on everything. Your tokens, your choice, forever. 
+              Value through genuine utility, not artificial scarcity.
             </p>
 
             <div className="features-grid enhanced">
               <div className="feature-item">
                 <div className="feature-icon">🆓</div>
                 <div className="feature-text">
-                  <h4>Zero Queimas Para Sempre</h4>
-                  <p>Sem queimas de transação, sem queimas de bridge, sem penalidades de staking - nunca!</p>
+                  <h4>Zero Burns Forever</h4>
+                  <p>No transaction burns, no bridge burns, no staking penalties - never!</p>
                 </div>
               </div>
               
               <div className="feature-item">
                 <div className="feature-icon">💎</div>
                 <div className="feature-text">
-                  <h4>Seus Tokens = Eternos</h4>
-                  <p>9.9B tokens para sempre - sem escassez artificial, apenas utilidade pura</p>
+                  <h4>Your Tokens = Eternal</h4>
+                  <p>9.9B tokens forever - no artificial scarcity, just pure utility</p>
                 </div>
               </div>
 
               <div className="feature-item">
                 <div className="feature-icon">⚡</div>
                 <div className="feature-text">
-                  <h4>Liberdade Infinita</h4>
-                  <p>Use, negocie, faça bridge, stake ou hold - zero pressão, máxima escolha</p>
+                  <h4>Infinite Freedom</h4>
+                  <p>Use, trade, bridge, stake or hold - zero pressure, maximum choice</p>
                 </div>
               </div>
 
               <div className="feature-item">
                 <div className="feature-icon">🚀</div>
                 <div className="feature-text">
-                  <h4>Valor = Utilidade</h4>
-                  <p>Preço cresce com adoção real e valor genuíno do ecossistema</p>
+                  <h4>Value = Utility</h4>
+                  <p>Price grows with real adoption and genuine ecosystem value</p>
                 </div>
               </div>
             </div>
@@ -1277,26 +1278,26 @@ const Home: React.FC<HomeProps> = ({
             <div className="stats-section enhanced">
               <div className="stat">
                 <div className="stat-number">0%</div>
-                <div className="stat-label">Total de Queimas</div>
+                <div className="stat-label">Total Burns</div>
               </div>
               <div className="stat">
                 <div className="stat-number">9.9B</div>
-                <div className="stat-label">Supply Eterno</div>
+                <div className="stat-label">Eternal Supply</div>
               </div>
               <div className="stat">
                 <div className="stat-number">100%</div>
-                <div className="stat-label">Liberdade do Usuário</div>
+                <div className="stat-label">User Freedom</div>
               </div>
               <div className="stat">
                 <div className="stat-number">∞</div>
-                <div className="stat-label">Possibilidades</div>
+                <div className="stat-label">Possibilities</div>
               </div>
             </div>
 
             {/* Enhanced Bonus Structure Section */}
             <div className="bonus-structure-section enhanced">
-              <h3>🎁 Estrutura de Bônus - Lote {currentBatch.batchNumber}</h3>
-              <p className="bonus-subtitle">Maior investimento = Maior porcentagem de bônus</p>
+              <h3>🎁 Bonus Structure - Batch {currentBatch.batchNumber}</h3>
+              <p className="bonus-subtitle">Higher investment = Higher bonus percentage</p>
               
               <div className="bonus-tiers enhanced">
                 {BONUS_STRUCTURE.map((tier, index) => (
@@ -1305,9 +1306,9 @@ const Home: React.FC<HomeProps> = ({
                     <div className="tier-info">
                       <div className="tier-name" style={{ color: tier.color }}>{tier.label}</div>
                       <div className="tier-requirement">
-                        {tier.minUSD > 0 ? `${formatUSD(tier.minUSD)}+` : 'Qualquer valor'}
+                        {tier.minUSD > 0 ? `${formatUSD(tier.minUSD)}+` : 'Any amount'}
                       </div>
-                      <div className="tier-bonus">+{tier.bonusPercent}% Bônus</div>
+                      <div className="tier-bonus">+{tier.bonusPercent}% Bonus</div>
                       <div className="tier-description">{tier.description}</div>
                     </div>
                   </div>
@@ -1315,66 +1316,64 @@ const Home: React.FC<HomeProps> = ({
               </div>
               
               <div className="bonus-example enhanced">
-                <h4>💡 Exemplos de Retorno:</h4>
+                <h4>💡 Return Examples:</h4>
                 <div className="example-grid enhanced">
                   <div className="example-item">
                     <span className="example-amount">{formatUSD(50000)}</span>
-                    <span className="example-bonus">🐋 +150% = 2.5x tokens</span>
-                    <span className="example-roi">ROI: +22,500%</span>
+                    <span className="example-bonus">🐋 +100% = 2.0x tokens</span>
+                    <span className="example-roi">ROI: +19,900%</span>
                   </div>
                   <div className="example-item">
                     <span className="example-amount">{formatUSD(25000)}</span>
-                    <span className="example-bonus">🐋 +120% = 2.2x tokens</span>
-                    <span className="example-roi">ROI: +19,800%</span>
+                    <span className="example-bonus">🐋 +80% = 1.8x tokens</span>
+                    <span className="example-roi">ROI: +17,900%</span>
                   </div>
                   <div className="example-item">
                     <span className="example-amount">{formatUSD(10000)}</span>
-                    <span className="example-bonus">🐋 +100% = 2x tokens</span>
-                    <span className="example-roi">ROI: +18,000%</span>
+                    <span className="example-bonus">🐋 +60% = 1.6x tokens</span>
+                    <span className="example-roi">ROI: +15,900%</span>
                   </div>
                   <div className="example-item">
                     <span className="example-amount">{formatUSD(5000)}</span>
-                    <span className="example-bonus">🦈 +75% = 1.75x tokens</span>
-                    <span className="example-roi">ROI: +15,750%</span>
+                    <span className="example-bonus">🦈 +45% = 1.45x tokens</span>
+                    <span className="example-roi">ROI: +14,400%</span>
                   </div>
                   <div className="example-item">
                     <span className="example-amount">{formatUSD(2000)}</span>
-                    <span className="example-bonus">🐬 +50% = 1.5x tokens</span>
-                    <span className="example-roi">ROI: +13,500%</span>
+                    <span className="example-bonus">🐬 +30% = 1.3x tokens</span>
+                    <span className="example-roi">ROI: +12,900%</span>
                   </div>
                   <div className="example-item">
                     <span className="example-amount">{formatUSD(500)}</span>
-                    <span className="example-bonus">🐟 +25% = 1.25x tokens</span>
-                    <span className="example-roi">ROI: +11,250%</span>
+                    <span className="example-bonus">🐟 +15% = 1.15x tokens</span>
+                    <span className="example-roi">ROI: +11,400%</span>
                   </div>
                   <div className="example-item">
                     <span className="example-amount">{formatUSD(100)}</span>
-                    <span className="example-bonus">🦐 +10% = 1.1x tokens</span>
-                    <span className="example-roi">ROI: +9,900%</span>
+                    <span className="example-bonus">🦐 +5% = 1.05x tokens</span>
+                    <span className="example-roi">ROI: +10,400%</span>
                   </div>
                 </div>
                 <div className="guarantee-note">
-                  <strong>🎯 GARANTIA:</strong> Todos os valores assumem preço mínimo de launch de $0.90
+                  <strong>🎯 GUARANTEE:</strong> All values assume minimum launch price of $1.20
                 </div>
               </div>
-
-              {/* Remove o botão show more já que agora mostramos todos */}
             </div>
 
             {/* Enhanced Portfolio Section for Connected Users */}
             {isConnected && userInvestments.totalTokens > 0 && (
               <div className="portfolio-section">
-                <h3>📊 Seu Portfólio HyperLayer0</h3>
+                <h3>📊 Your HyperLayer0 Portfolio</h3>
                 <div className="portfolio-stats">
                   <div className="portfolio-stat">
-                    <span className="stat-label">Tokens HL0</span>
+                    <span className="stat-label">HL0 Tokens</span>
                     <span className="stat-value">{formatTokens(userInvestments.totalTokens)}</span>
                     <span className="stat-detail">
-                      {formatTokens(userInvestments.totalBonusTokens)} bônus
+                      {formatTokens(userInvestments.totalBonusTokens)} bonus
                     </span>
                   </div>
                   <div className="portfolio-stat">
-                    <span className="stat-label">Valor Atual</span>
+                    <span className="stat-label">Current Value</span>
                     <span className="stat-value">{formatUSD(portfolioValue.tokensValue)}</span>
                     <span className={`stat-detail ${portfolioValue.profitLoss >= 0 ? 'profit' : 'loss'}`}>
                       {portfolioValue.profitLoss >= 0 ? '+' : ''}{formatUSD(portfolioValue.profitLoss)} 
@@ -1382,9 +1381,9 @@ const Home: React.FC<HomeProps> = ({
                     </span>
                   </div>
                   <div className="portfolio-stat">
-                    <span className="stat-label">Preço Médio</span>
+                    <span className="stat-label">Average Price</span>
                     <span className="stat-value">{formatUSD(userInvestments.averageBuyPrice)}</span>
-                    <span className="stat-detail">vs {formatUSD(getCurrentBatchPrice(currentBatch))} atual</span>
+                    <span className="stat-detail">vs {formatUSD(getCurrentBatchPrice(currentBatch))} current</span>
                   </div>
                   {userInvestments.stakingActive && (
                     <div className="portfolio-stat">
@@ -1404,15 +1403,14 @@ const Home: React.FC<HomeProps> = ({
               {/* Enhanced Countdown and Batch Info */}
               <div className="countdown-section enhanced">
                 <div className="batch-header">
-                  <h2>🎯 Lote {currentBatch.batchNumber} - {currentBatch.phase}</h2>
+                  <h2>🎯 Batch {currentBatch.batchNumber} - {currentBatch.phase}</h2>
                   <div className="price-display">
-                    <span className="current-price">{formatUSD(currentBatch.priceUSD)}</span>
-                    <span className="price-trend">📈 +{formatUSD(DAILY_PRICE_INCREASE)}/dia</span>
+                    <span className="current-price">{formatUSD(currentBatch.priceUSD, 7)}</span>
                   </div>
                 </div>
                 
                 <div className="countdown-timer-container">
-                  <h3>📈 Próximo Aumento de Preço Em:</h3>
+                  <h3>📈 Next Price Increase In:</h3>
                   <CountdownTimer 
                     initialHours={24}
                     onComplete={onCountdownComplete}
@@ -1420,11 +1418,15 @@ const Home: React.FC<HomeProps> = ({
                   />
                   <div className="price-increase-info">
                     <div className="price-info-item">
-                      <span>Amanhã:</span>
-                      <strong>{formatUSD(0.009012)}</strong>
+                      <span>Tomorrow:</span>
+                      <strong>{formatUSD(0.0090120, 7)}</strong>
                     </div>
                     <div className="price-info-item">
-                      <span>APR permanece:</span>
+                      <span>Batch 2 Price:</span>
+                      <strong>{formatUSD(0.015, 3)}</strong>
+                    </div>
+                    <div className="price-info-item">
+                      <span>APR remains:</span>
                       <strong>{currentBatch.apyRate}%</strong>
                     </div>
                   </div>
@@ -1433,11 +1435,11 @@ const Home: React.FC<HomeProps> = ({
                 <div className="batch-quick-info">
                   <div className="quick-stat">
                     <span className="stat-icon">🎁</span>
-                    <span>Bônus Máx: <strong>{currentBatch.maxBonus}% 🐋</strong></span>
+                    <span>Max Bonus: <strong>{currentBatch.maxBonus}% 🐋</strong></span>
                   </div>
                   <div className="quick-stat">
                     <span className="stat-icon">🔮</span>
-                    <span>APY Atual: <strong>{currentBatch.apyRate}%</strong></span>
+                    <span>Current APY: <strong>{currentBatch.apyRate}%</strong></span>
                   </div>
                 </div>
               </div>
@@ -1446,10 +1448,10 @@ const Home: React.FC<HomeProps> = ({
               <div className="progress-section enhanced">
                 <div className="raised-amount">
                   <span className="batch-info">
-                    Lote {currentBatch.batchNumber}: {formatTokens(currentBatch.tokensSold)} / {formatTokens(currentBatch.tokensTotal)} tokens
+                    Batch {currentBatch.batchNumber}: {formatTokens(currentBatch.tokensSold)} / {formatTokens(currentBatch.tokensTotal)} tokens
                   </span>
                   <span className="usd-raised">
-                    {formatUSD(currentBatch.tokensSold * currentBatch.priceUSD)} arrecadados
+                    {formatUSD(currentBatch.tokensSold * currentBatch.priceUSD)} raised
                   </span>
                 </div>
                 <div className="progress-bar enhanced">
@@ -1461,8 +1463,8 @@ const Home: React.FC<HomeProps> = ({
                   ></div>
                 </div>
                 <div className="progress-stats">
-                  <span>{((currentBatch.tokensSold / currentBatch.tokensTotal) * 100).toFixed(2)}% Completo</span>
-                  <span>{formatTokens(Math.max(0, currentBatch.tokensTotal - currentBatch.tokensSold))} Restantes</span>
+                  <span>{((currentBatch.tokensSold / currentBatch.tokensTotal) * 100).toFixed(2)}% Complete</span>
+                  <span>{formatTokens(Math.max(0, currentBatch.tokensTotal - currentBatch.tokensSold))} Remaining</span>
                 </div>
                 
                 {/* Enhanced Next Batch Alert */}
@@ -1471,10 +1473,13 @@ const Home: React.FC<HomeProps> = ({
                     <span className="alert-icon">⚡</span>
                     <div className="alert-content">
                       <div className="batch-warning-line">
-                        <strong>Lote 2:</strong> Preço salta para <strong>{formatUSD(currentBatch.nextBatchPrice)}</strong>
+                        <strong>Batch 2:</strong> Price jumps to <strong>{formatUSD(0.015, 3)}</strong> (+67% increase!)
                       </div>
                       <div className="batch-warning-line">
-                        APY reduz para <strong>966%</strong> • Bônus máximo reduz para <strong>100%</strong>
+                        APY reduces to <strong>900%</strong> • Max bonus reduces to <strong>90%</strong>
+                      </div>
+                      <div className="batch-warning-line">
+                        <strong>Final Launch:</strong> Target price <strong>{formatUSD(1.20)}</strong> (133x from Batch 1)
                       </div>
                     </div>
                   </div>
@@ -1486,26 +1491,26 @@ const Home: React.FC<HomeProps> = ({
                 <div className="user-section enhanced">
                   <div className="user-stats">
                     <div className="user-stat">
-                      <span className="stat-label">Seus Tokens HL0</span>
+                      <span className="stat-label">Your HL0 Tokens</span>
                       <span className="stat-value">{formatTokens(userInvestments.totalTokens)} HL0</span>
                       <span className="stat-subvalue">
                         {userInvestments.totalBonusTokens > 0 && 
-                          `+${formatTokens(userInvestments.totalBonusTokens)} bônus`
+                          `+${formatTokens(userInvestments.totalBonusTokens)} bonus`
                         }
                       </span>
                     </div>
                     <div className="user-stat">
-                      <span className="stat-label">Total Investido</span>
+                      <span className="stat-label">Total Invested</span>
                       <span className="stat-value">{formatUSD(userInvestments.totalInvested)}</span>
                       <span className="stat-subvalue">
-                        Valor atual: {formatUSD(portfolioValue.tokensValue)}
+                        Current value: {formatUSD(portfolioValue.tokensValue)}
                       </span>
                     </div>
                     <div className="user-stat">
-                      <span className="stat-label">APR Potencial</span>
+                      <span className="stat-label">Potential APR</span>
                       <span className="stat-value">1500% - {currentBatch.apyRate}%</span>
                       <span className="stat-subvalue">
-                        {userInvestments.stakingActive ? '🔒 Staking Ativo' : '💫 Sem Staking'}
+                        {userInvestments.stakingActive ? '🔒 Staking Active' : '💫 No Staking'}
                       </span>
                     </div>
                   </div>
@@ -1515,7 +1520,7 @@ const Home: React.FC<HomeProps> = ({
               {/* Enhanced Purchase Form */}
               <div className="form-section enhanced">
                 <div className="form-group">
-                  <label>Método de Pagamento</label>
+                  <label>Payment Method</label>
                   <div className="payment-methods">
                     <button 
                       className={`payment-method ${paymentMethod === 'crypto' ? 'active' : ''}`}
@@ -1528,7 +1533,7 @@ const Home: React.FC<HomeProps> = ({
                       onClick={() => setPaymentMethod('card')}
                       disabled
                     >
-                      💳 Card (em breve)
+                      💳 Card (coming soon)
                     </button>
                   </div>
                 </div>
@@ -1536,7 +1541,7 @@ const Home: React.FC<HomeProps> = ({
                 {paymentMethod === 'crypto' && (
                   <>
                     <div className="form-group">
-                      <label>Rede Blockchain</label>
+                      <label>Blockchain Network</label>
                       <div className="network-selector enhanced">
                         {Object.entries(NETWORKS).map(([key, network]) => (
                           <button
@@ -1552,7 +1557,7 @@ const Home: React.FC<HomeProps> = ({
                             <div className="network-details">
                               <span className="network-name">{network.name}</span>
                               {selectedNetwork === key && (
-                                <span className="network-status">✓ Conectado</span>
+                                <span className="network-status">✓ Connected</span>
                               )}
                             </div>
                           </button>
@@ -1560,14 +1565,14 @@ const Home: React.FC<HomeProps> = ({
                       </div>
                       {!isCorrectNetwork && selectedNetwork !== 'bitcoin' && isConnected && (
                         <div className="network-warning">
-                          ⚠️ Por favor, mude para a rede {NETWORKS[selectedNetwork]?.name}
+                          ⚠️ Please switch to {NETWORKS[selectedNetwork]?.name} network
                         </div>
                       )}
                     </div>
 
                     <div className="form-group">
                       <label>
-                        Moeda
+                        Currency
                         {selectedCurrency && (
                           <span className="current-price-label">
                             {formatUSD(currentPrice)}
@@ -1590,25 +1595,25 @@ const Home: React.FC<HomeProps> = ({
                         <div className="balance-info enhanced">
                           {isLoadingBalances ? (
                             <span className="loading-balance">
-                              ⏳ Carregando saldo...
+                              ⏳ Loading balance...
                             </span>
                           ) : currentBalance > 0 ? (
                             <span className="balance-amount">
-                              Saldo: {formatCurrency(currentBalance, selectedCurrency)}
+                              Balance: {formatCurrency(currentBalance, selectedCurrency)}
                               <span className="balance-usd">
                                 ≈ {formatUSD(currentBalance * currentPrice)}
                               </span>
                             </span>
                           ) : (
                             <span className="no-balance">
-                              Sem saldo disponível
+                              No balance available
                             </span>
                           )}
                           <button 
                             className="refresh-balance"
                             onClick={() => loadBalances()}
                             disabled={isLoadingBalances}
-                            title="Atualizar saldo"
+                            title="Refresh balance"
                           >
                             🔄
                           </button>
@@ -1620,7 +1625,7 @@ const Home: React.FC<HomeProps> = ({
 
                 <div className="form-group">
                   <label>
-                    Valor {paymentMethod === 'crypto' ? `(${selectedCurrency})` : '(USD)'}
+                    Amount {paymentMethod === 'crypto' ? `(${selectedCurrency})` : '(USD)'}
                     {amount && tokensToReceive.usdValue >= MIN_PURCHASE_USD && (
                       <span className="usd-equivalent-label">
                         ≈ {formatUSD(tokensToReceive.usdValue)}
@@ -1682,7 +1687,7 @@ const Home: React.FC<HomeProps> = ({
                   {/* Enhanced Quick Amount Suggestions */}
                   {!amount && (
                     <div className="quick-amounts-suggestions">
-                      <span className="suggestions-label">Valores sugeridos:</span>
+                      <span className="suggestions-label">Suggested amounts:</span>
                       <div className="suggestions-grid">
                         {selectedCurrency === 'BTC' ? (
                           <>
@@ -1717,46 +1722,46 @@ const Home: React.FC<HomeProps> = ({
                         <div className="tier-badge enhanced" style={{ backgroundColor: tokensToReceive.tier.color }}>
                           <span className="tier-icon">{tokensToReceive.tier.icon}</span>
                           <span className="tier-text">
-                            {tokensToReceive.tier.label} - {tokensToReceive.tier.bonusPercent}% Bônus
+                            {tokensToReceive.tier.label} - {tokensToReceive.tier.bonusPercent}% Bonus
                           </span>
                         </div>
                         <div className="tokens-breakdown enhanced">
                           <div className="token-line">
-                            <span>Tokens base:</span>
+                            <span>Base tokens:</span>
                             <span><strong>{formatTokens(tokensToReceive.base)} HL0</strong></span>
                           </div>
                           {tokensToReceive.bonus > 0 && (
                             <div className="token-line bonus-line">
-                              <span>Tokens bônus:</span>
+                              <span>Bonus tokens:</span>
                               <span><strong>+{formatTokens(tokensToReceive.bonus)} HL0</strong></span>
                             </div>
                           )}
                           <div className="token-line total-line">
-                            <span>Total que você recebe:</span>
+                            <span>Total you receive:</span>
                             <span><strong>{formatTokens(tokensToReceive.total)} HL0</strong></span>
                           </div>
                           <div className="token-line value-line">
-                            <span>Valor do investimento:</span>
+                            <span>Investment value:</span>
                             <span><strong>{formatUSD(tokensToReceive.usdValue)}</strong></span>
                           </div>
                         </div>
                         
                         <div className="roi-projection">
-                          <h5>📈 Projeção de Retorno Garantido (Launch a $0.90):</h5>
+                          <h5>📈 Guaranteed Return Projection (Launch at $1.20):</h5>
                           <div className="roi-banner">
-                            <span className="roi-guarantee">🎯 MÍNIMO 10000% GARANTIDO!</span>
+                            <span className="roi-guarantee">🎯 MINIMUM 10000% GUARANTEED!</span>
                           </div>
                           <div className="roi-stats">
                             <div className="roi-stat">
-                              <span className="roi-label">Valor na Launch:</span>
+                              <span className="roi-label">Value at Launch:</span>
                               <span className="roi-value profit">
-                                {formatUSD(tokensToReceive.total * 0.90)}
+                                {formatUSD(tokensToReceive.total * 1.20)}
                               </span>
                             </div>
                             <div className="roi-stat">
-                              <span className="roi-label">ROI Mínimo:</span>
+                              <span className="roi-label">Minimum ROI:</span>
                               <span className="roi-value profit">
-                                +{Math.max(9000, Math.round(((tokensToReceive.total * 0.90) / tokensToReceive.usdValue - 1) * 100)).toLocaleString()}%
+                                +{Math.max(10000, Math.round(((tokensToReceive.total * 1.20) / tokensToReceive.usdValue - 1) * 100)).toLocaleString()}%
                               </span>
                             </div>
                           </div>
@@ -1768,8 +1773,8 @@ const Home: React.FC<HomeProps> = ({
                   {/* Minimum Purchase Warning */}
                   {amount && tokensToReceive.usdValue > 0 && tokensToReceive.usdValue < MIN_PURCHASE_USD && (
                     <div className="min-purchase-warning">
-                      ⚠️ Compra mínima: {formatUSD(MIN_PURCHASE_USD)}
-                      <br/>Valor atual: {formatUSD(tokensToReceive.usdValue)}
+                      ⚠️ Minimum purchase: {formatUSD(MIN_PURCHASE_USD)}
+                      <br/>Current amount: {formatUSD(tokensToReceive.usdValue)}
                     </div>
                   )}
                 </div>
@@ -1805,22 +1810,22 @@ const Home: React.FC<HomeProps> = ({
                     {isLoading ? (
                       <span className="loading-content">
                         <span className="loading-spinner">⏳</span>
-                        Processando...
+                        Processing...
                       </span>
                     ) : !isConnected && paymentMethod === 'crypto' ? (
                       <span className="button-content">
                         <span className="button-icon">🔗</span>
-                        Conectar Carteira
+                        Connect Wallet
                       </span>
                     ) : selectedCurrency === 'BTC' && selectedNetwork === 'bitcoin' ? (
                       <span className="button-content">
                         <span className="button-icon">₿</span>
-                        Pagar {amount} BTC
+                        Pay {amount} BTC
                       </span>
                     ) : (
                       <span className="button-content">
                         <span className="button-icon">💰</span>
-                        Comprar {formatTokens(tokensToReceive.total)} HL0
+                        Buy {formatTokens(tokensToReceive.total)} HL0
                       </span>
                     )}
                   </button>
@@ -1839,22 +1844,22 @@ const Home: React.FC<HomeProps> = ({
                     {isLoading ? (
                       <span className="loading-content">
                         <span className="loading-spinner">⏳</span>
-                        Processando...
+                        Processing...
                       </span>
                     ) : !isConnected && paymentMethod === 'crypto' ? (
                       <span className="button-content">
                         <span className="button-icon">🔗</span>
-                        Conectar Carteira
+                        Connect Wallet
                       </span>
                     ) : selectedCurrency === 'BTC' && selectedNetwork === 'bitcoin' ? (
                       <span className="button-content">
                         <span className="button-icon">🔒</span>
-                        Pagar {amount} BTC + Staking
+                        Pay {amount} BTC + Staking
                       </span>
                     ) : (
                       <span className="button-content">
                         <span className="button-icon">🔒</span>
-                        Comprar {formatTokens(tokensToReceive.total)} HL0 + Staking
+                        Buy {formatTokens(tokensToReceive.total)} HL0 + Staking
                       </span>
                     )}
                   </button>
@@ -1869,23 +1874,23 @@ const Home: React.FC<HomeProps> = ({
                         <strong>Pure Choice Staking:</strong>
                       </div>
                       <div className="staking-description">
-                        Faça lock dos tokens e ganhe {currentBatch.apyRate}% APR baseado no seu lote!
+                        Lock your tokens and earn {currentBatch.apyRate}% APR based on your batch!
                         <br/>
-                        <strong>Zero Pressão:</strong> Seus tokens permanecem seus para sempre - 
-                        faça stake apenas se quiser recompensas extras. Sem penalidades, nunca!
+                        <strong>Zero Pressure:</strong> Your tokens remain yours forever - 
+                        stake only if you want extra rewards. No penalties, ever!
                       </div>
                       <div className="staking-benefits-list">
                         <div className="benefit-item">
                           <span className="benefit-icon">💰</span>
-                          <span>APR atual: {currentBatch.apyRate}%</span>
+                          <span>Current APR: {currentBatch.apyRate}%</span>
                         </div>
                         <div className="benefit-item">
                           <span className="benefit-icon">🔓</span>
-                          <span>Sem período mínimo de lock</span>
+                          <span>No minimum lock period</span>
                         </div>
                         <div className="benefit-item">
                           <span className="benefit-icon">🎁</span>
-                          <span>Recompensas compostas automáticas</span>
+                          <span>Automatic compound rewards</span>
                         </div>
                       </div>
                     </div>
@@ -1895,9 +1900,9 @@ const Home: React.FC<HomeProps> = ({
                 {/* Advanced Options */}
                 {showAdvancedOptions && (
                   <div className="advanced-options">
-                    <h4>⚙️ Opções Avançadas</h4>
+                    <h4>⚙️ Advanced Options</h4>
                     <div className="option-group">
-                      <label>Tolerância de Slippage (%)</label>
+                      <label>Slippage Tolerance (%)</label>
                       <select 
                         value={slippageTolerance}
                         onChange={(e) => setSlippageTolerance(Number(e.target.value))}
@@ -1918,7 +1923,7 @@ const Home: React.FC<HomeProps> = ({
                   <div className="bitcoin-modal-overlay enhanced" onClick={() => setShowBitcoinInstructions(false)}>
                     <div className="bitcoin-modal enhanced" onClick={(e) => e.stopPropagation()}>
                       <div className="bitcoin-modal-header">
-                        <h3>₿ Instruções de Pagamento Bitcoin</h3>
+                        <h3>₿ Bitcoin Payment Instructions</h3>
                         <button 
                           className="close-modal-btn"
                           onClick={() => setShowBitcoinInstructions(false)}
@@ -1930,21 +1935,21 @@ const Home: React.FC<HomeProps> = ({
                       <div className="bitcoin-modal-content">
                         <div className="payment-details enhanced">
                           <div className="detail-row">
-                            <span className="detail-label">Valor a Enviar:</span>
+                            <span className="detail-label">Amount to Send:</span>
                             <span className="detail-value">{amount} BTC</span>
                           </div>
                           <div className="detail-row">
-                            <span className="detail-label">Valor USD:</span>
+                            <span className="detail-label">USD Value:</span>
                             <span className="detail-value">
                               {formatUSD(parseFloat(amount || '0') * (prices.BTC || getPrice('BTC')))}
                             </span>
                           </div>
                           <div className="detail-row">
-                            <span className="detail-label">Tokens HL0:</span>
+                            <span className="detail-label">HL0 Tokens:</span>
                             <span className="detail-value">{formatTokens(tokensToReceive.total)} HL0</span>
                           </div>
                           <div className="detail-row">
-                            <span className="detail-label">Tier de Bônus:</span>
+                            <span className="detail-label">Bonus Tier:</span>
                             <span className="detail-value">
                               {tokensToReceive.tier.icon} {tokensToReceive.tier.label} (+{tokensToReceive.tier.bonusPercent}%)
                             </span>
@@ -1952,13 +1957,13 @@ const Home: React.FC<HomeProps> = ({
                           {withStaking && (
                             <div className="detail-row staking-row">
                               <span className="detail-label">🔒 Staking:</span>
-                              <span className="detail-value">Ativado ({currentBatch.apyRate}% APR)</span>
+                              <span className="detail-value">Activated ({currentBatch.apyRate}% APR)</span>
                             </div>
                           )}
                         </div>
 
                         <div className="bitcoin-address-section enhanced">
-                          <div className="address-label">Endereço Bitcoin:</div>
+                          <div className="address-label">Bitcoin Address:</div>
                           <div className="bitcoin-address-display">
                             <code>{PRESALE_BTC_ADDRESS}</code>
                             <button 
@@ -1968,34 +1973,34 @@ const Home: React.FC<HomeProps> = ({
                                 const btn = document.querySelector('.copy-address-btn');
                                 if (btn) {
                                   const originalText = btn.textContent;
-                                  btn.textContent = '✓ Copiado';
+                                  btn.textContent = '✓ Copied';
                                   setTimeout(() => {
                                     btn.textContent = originalText;
                                   }, 2000);
                                 }
-                                addNotification('success', 'Endereço copiado!');
+                                addNotification('success', 'Address copied!');
                               }}
-                              title="Copiar endereço"
+                              title="Copy address"
                             >
-                              📋 Copiar
+                              📋 Copy
                             </button>
                           </div>
                         </div>
 
                         <div className="bitcoin-instructions enhanced">
-                          <h4>📋 Passos para Completar o Pagamento:</h4>
+                          <h4>📋 Steps to Complete Payment:</h4>
                           <ol>
-                            <li>Copie o endereço Bitcoin acima</li>
-                            <li>Abra sua carteira Bitcoin</li>
-                            <li>Envie exatamente <strong>{amount} BTC</strong> para o endereço</li>
-                            <li>Aguarde a confirmação da transação</li>
-                            <li>Clique em "Confirmar Pagamento" abaixo</li>
+                            <li>Copy the Bitcoin address above</li>
+                            <li>Open your Bitcoin wallet</li>
+                            <li>Send exactly <strong>{amount} BTC</strong> to the address</li>
+                            <li>Wait for transaction confirmation</li>
+                            <li>Click "Confirm Payment" below</li>
                           </ol>
                         </div>
 
                         <div className="bitcoin-warning enhanced">
-                          ⚠️ <strong>Importante:</strong> Envie apenas Bitcoin (BTC) para este endereço. 
-                          Enviar outras criptomoedas pode resultar em perda permanente.
+                          ⚠️ <strong>Important:</strong> Only send Bitcoin (BTC) to this address. 
+                          Sending other cryptocurrencies may result in permanent loss.
                         </div>
 
                         <div className="bitcoin-modal-actions">
@@ -2003,13 +2008,13 @@ const Home: React.FC<HomeProps> = ({
                             className="confirm-bitcoin-btn"
                             onClick={handleBitcoinConfirmation}
                           >
-                            ✅ Enviei o Bitcoin - Confirmar Pagamento
+                            ✅ I Sent Bitcoin - Confirm Payment
                           </button>
                           <button 
                             className="cancel-bitcoin-btn"
                             onClick={() => setShowBitcoinInstructions(false)}
                           >
-                            Cancelar
+                            Cancel
                           </button>
                         </div>
                       </div>
@@ -2022,9 +2027,9 @@ const Home: React.FC<HomeProps> = ({
               {isConnected && userInvestments.transactions.length > 0 && (
                 <div className="transaction-history enhanced">
                   <div className="history-header">
-                    <h3>📊 Histórico de Compras</h3>
+                    <h3>📊 Purchase History</h3>
                     <span className="transaction-count">
-                      {userInvestments.transactions.length} transação{userInvestments.transactions.length !== 1 ? 'ões' : ''}
+                      {userInvestments.transactions.length} transaction{userInvestments.transactions.length !== 1 ? 's' : ''}
                     </span>
                   </div>
                   <div className="transactions-list">
@@ -2041,7 +2046,7 @@ const Home: React.FC<HomeProps> = ({
                             </span>
                           </div>
                           <div className="tx-badges">
-                            <span className="tx-batch">Lote {tx.batchNumber}</span>
+                            <span className="tx-batch">Batch {tx.batchNumber}</span>
                             {tx.withStaking && <span className="tx-staking">🔒</span>}
                             <span className="tx-tier" style={{ backgroundColor: tx.tier.color }}>
                               {tx.tier.icon}
@@ -2051,17 +2056,17 @@ const Home: React.FC<HomeProps> = ({
                         
                         <div className="tx-details">
                           <div className="tx-detail">
-                            <span className="detail-label">Bônus:</span>
+                            <span className="detail-label">Bonus:</span>
                             <span className="detail-value">
                               +{formatTokens(tx.bonusTokens)} HL0 ({tx.tier.bonusPercent}%)
                             </span>
                           </div>
                           <div className="tx-detail">
-                            <span className="detail-label">Valor USD:</span>
+                            <span className="detail-label">USD Value:</span>
                             <span className="detail-value">{formatUSD(tx.usdValue)}</span>
                           </div>
                           <div className="tx-detail">
-                            <span className="detail-label">Rede:</span>
+                            <span className="detail-label">Network:</span>
                             <span className="detail-value">
                               {NETWORKS[tx.network]?.icon} {NETWORKS[tx.network]?.name}
                             </span>
@@ -2070,7 +2075,7 @@ const Home: React.FC<HomeProps> = ({
 
                         <div className="tx-meta">
                           <span className="tx-date">
-                            {new Date(tx.timestamp).toLocaleDateString('pt-BR', {
+                            {new Date(tx.timestamp).toLocaleDateString('en-US', {
                               year: 'numeric',
                               month: 'short',
                               day: 'numeric',
@@ -2085,7 +2090,7 @@ const Home: React.FC<HomeProps> = ({
                               rel="noopener noreferrer"
                               className="tx-link"
                             >
-                              Ver Transação ↗
+                              View Transaction ↗
                             </a>
                           )}
                         </div>
@@ -2096,7 +2101,7 @@ const Home: React.FC<HomeProps> = ({
                   {userInvestments.transactions.length > 5 && (
                     <div className="view-all-transactions">
                       <button className="view-all-btn">
-                        Ver Todas as {userInvestments.transactions.length} Transações
+                        View All {userInvestments.transactions.length} Transactions
                       </button>
                     </div>
                   )}
@@ -2105,7 +2110,7 @@ const Home: React.FC<HomeProps> = ({
 
               {/* Help & Support Section */}
               <div className="help-section">
-                <h4>💬 Precisa de Ajuda?</h4>
+                <h4>💬 Need Help?</h4>
                 <div className="help-buttons">
                   <button 
                     className="help-btn"
@@ -2124,8 +2129,8 @@ const Home: React.FC<HomeProps> = ({
                 </div>
                 <div className="help-info">
                   <p>
-                    Suporte 24/7 disponível para ajudar com sua compra. 
-                    Resposta em menos de 5 minutos!
+                    24/7 support available to help with your purchase. 
+                    Response in less than 5 minutes!
                   </p>
                 </div>
               </div>
