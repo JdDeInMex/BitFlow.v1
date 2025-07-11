@@ -8,9 +8,10 @@ import Roadmap from './components/Roadmap/Roadmap';
 import Footer from './components/Footer/Footer';
 import About from './components/About/About';
 import Home from './components/home/Home';
-import Tokenomics from './components/Tokenomics/Tokenomics.tsx'; // Nova importação
+import Tokenomics from './components/Tokenomics/Tokenomics.tsx';
+//import Solutions from './components/Solutions/Solutions.tsx'; // Nova importação
 
-type Page = 'home' | 'about' | 'tokenomics' | 'architecture' | 'use-cases' | 'roadmap' | 'docs'; // Adicionado 'tokenomics'
+type Page = 'home' | 'about' | 'tokenomics' | 'architecture' | 'use-cases' | 'roadmap' | 'docs' | 'solutions'; // Adicionado 'solutions'
 
 // Main App Content Component (inside providers)
 const AppContent: React.FC = () => {
@@ -23,11 +24,12 @@ const AppContent: React.FC = () => {
     const pageMap: Record<string, Page> = {
       '/': 'home',
       '/about': 'about',
-      '/tokenomics': 'tokenomics', // Nova rota
+      '/tokenomics': 'tokenomics',
       '/architecture': 'architecture',
       '/use-cases': 'use-cases',
       '/roadmap': 'roadmap',
-      '/docs': 'docs'
+      '/docs': 'docs',
+      '/solutions': 'solutions' // Nova rota
     };
     
     const page = pageMap[path] || 'home';
@@ -129,7 +131,7 @@ const AppContent: React.FC = () => {
   // Função para navegar entre páginas (fixed to accept string and convert to Page)
   const navigateToPage = (page: string) => {
     // Validate that the page is a valid Page type
-    const validPages: Page[] = ['home', 'about', 'tokenomics', 'architecture', 'use-cases', 'roadmap', 'docs']; // Adicionado 'tokenomics'
+    const validPages: Page[] = ['home', 'about', 'tokenomics', 'architecture', 'use-cases', 'roadmap', 'docs', 'solutions']; // Adicionado 'solutions'
     const validatedPage: Page = validPages.includes(page as Page) ? (page as Page) : 'home';
     
     setCurrentPage(validatedPage);
@@ -138,11 +140,12 @@ const AppContent: React.FC = () => {
     const urlMap: Record<Page, string> = {
       'home': '/',
       'about': '/about',
-      'tokenomics': '/tokenomics', // Nova URL
+      'tokenomics': '/tokenomics',
       'architecture': '/architecture',
       'use-cases': '/use-cases',
       'roadmap': '/roadmap',
-      'docs': '/docs'
+      'docs': '/docs',
+      'solutions': '/solutions' // Nova URL
     };
     
     const newUrl = urlMap[validatedPage];
@@ -207,7 +210,7 @@ const AppContent: React.FC = () => {
         );
       case 'about':
         return <About />;
-      case 'tokenomics': // Novo case
+      case 'tokenomics':
         return <Tokenomics />;
       case 'architecture':
         return <Architecture />;
@@ -215,6 +218,8 @@ const AppContent: React.FC = () => {
         return <UseCases />;
       case 'roadmap':
         return <Roadmap />;
+  //    case 'solutions': // Novo case para a página de soluções
+//        return <Solutions />;
       default:
         return (
           <Home 

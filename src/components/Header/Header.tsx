@@ -70,6 +70,7 @@ interface NavigationItem {
   icon?: string;
 }
 
+
 // Navigation items - UPDATED WITH TOKENOMICS
 const NAVIGATION_ITEMS: NavigationItem[] = [
   { key: 'home', label: 'Home', icon: '🏠' },

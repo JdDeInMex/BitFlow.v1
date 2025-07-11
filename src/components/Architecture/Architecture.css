@@ -348,6 +348,10 @@
   overflow: hidden;
 }
 
+.layer-component.with-tooltip {
+  position: relative;
+}
+
 .layer-component::before {
   content: '';
   position: absolute;
@@ -423,6 +427,54 @@
 
 .layer-component.active .glow-effect {
   opacity: 1;
+}
+
+/* Component Tooltip */
+.component-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 20, 30, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  min-width: 250px;
+  z-index: 10;
+  opacity: 0;
+  animation: tooltipFadeIn 0.3s ease forwards;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes tooltipFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.component-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: rgba(20, 20, 30, 0.98);
+}
+
+.component-tooltip h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--primary-green);
+}
+
+.component-tooltip p {
+  font-size: 0.875rem;
+  color: var(--muted-text);
+  line-height: 1.4;
+  margin: 0;
 }
 
 /* Component Details Panel */
@@ -511,10 +563,199 @@
   top: 0.125rem;
 }
 
+/* Technical Specifications */
+.technical-specs {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.technical-specs h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--light-text);
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.spec-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.spec-label {
+  font-size: 0.875rem;
+  color: var(--muted-text);
+}
+
+.spec-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary-green);
+}
+
+/* Applications Section */
+.applications {
+  margin-top: 2rem;
+}
+
+.applications h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--light-text);
+}
+
+.applications-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.application-tag {
+  background: var(--primary-green-light);
+  color: var(--primary-green);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--primary-green-border);
+}
+
+/* Technical Specifications Section */
+.technical-specifications {
+  padding: 80px 0;
+  background: var(--darker-bg);
+}
+
+.technical-specifications h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.specs-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+}
+
+.spec-tab {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted-text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.spec-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  color: var(--light-text);
+}
+
+.spec-tab.active {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  box-shadow: var(--glow-primary);
+}
+
+.spec-details {
+  margin-top: 3rem;
+}
+
+.spec-content {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 3rem;
+}
+
+.spec-content h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: var(--light-text);
+}
+
+.spec-content .spec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.spec-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.spec-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.spec-card h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--primary-green);
+}
+
+.spec-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.spec-card li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--muted-text);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.spec-card li:before {
+  content: "▶";
+  position: absolute;
+  left: 0;
+  color: var(--primary-green);
+  font-size: 0.625rem;
+  top: 0.125rem;
+}
+
 /* Interactive Components Section */
 .interactive-components {
   padding: 80px 0;
-  background: var(--primary-blue-light);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .interactive-components h2 {
@@ -529,11 +770,16 @@
   background-clip: text;
 }
 
-.components-grid {
+/* 2x3 Grid Layout */
+.tech-grid-2x3 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   gap: 2rem;
   margin-top: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .interactive-card {
@@ -545,6 +791,15 @@
   cursor: pointer;
   position: relative;
   overflow: hidden;
+}
+
+.interactive-card.expandable {
+  position: relative;
+  z-index: 1;
+}
+
+.interactive-card.expandable:hover {
+  z-index: 10;
 }
 
 .interactive-card::after {
@@ -600,28 +855,117 @@
   line-height: 1.6;
 }
 
-.card-features {
+.card-features-preview {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.card-features li {
+.card-features-preview li {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   color: var(--muted-text);
   font-size: 0.9rem;
 }
 
-.card-features li::before {
+.card-features-preview li::before {
   content: "▶";
   color: var(--primary-green);
   font-size: 0.7rem;
 }
 
-/* Performance Metrics */
+/* Expanded Card Content */
+.card-expanded {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(20, 20, 30, 0.98);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0;
+  transform: scale(0.95);
+  animation: expandIn 0.3s ease forwards;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes expandIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.card-expanded h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--primary-green);
+}
+
+.card-features-full {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.card-features-full li {
+  position: relative;
+  padding-left: 1.25rem;
+  color: var(--light-text);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.card-features-full li:before {
+  content: "▶";
+  position: absolute;
+  left: 0;
+  color: var(--primary-green);
+  font-size: 0.625rem;
+  top: 0.125rem;
+}
+
+.tech-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mini-stat {
+  text-align: center;
+}
+
+.mini-stat .stat-value {
+  display: block;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-green);
+  margin-bottom: 0.25rem;
+}
+
+.mini-stat .stat-label {
+  font-size: 0.75rem;
+  color: var(--muted-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Performance Section */
 .performance-section {
   padding: 80px 0;
   background: rgba(255, 255, 255, 0.02);
@@ -639,11 +983,59 @@
   background-clip: text;
 }
 
+/* Performance Tabs */
+.performance-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.perf-tab {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted-text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.perf-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  color: var(--light-text);
+}
+
+.perf-tab.active {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  box-shadow: var(--glow-primary);
+}
+
+.performance-content {
+  min-height: 400px;
+}
+
+.tab-content {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.tab-content.animate-in {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
-  margin-top: 3rem;
+  margin-bottom: 3rem;
 }
 
 .metric-card {
@@ -679,23 +1071,7 @@
   transform: scaleX(1);
 }
 
-.metric-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.5rem;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-}
-
-.metric-icon.tps { background: linear-gradient(135deg, #4caf50, #388e3c); }
-.metric-icon.cost { background: linear-gradient(135deg, #ff9800, #f57c00); }
-.metric-icon.finality { background: linear-gradient(135deg, #2196f3, #1976d2); }
-.metric-icon.energy { background: linear-gradient(135deg, #9c27b0, #7b1fa2); }
-
-.metric-value {
+.metric-card h3 {
   font-family: 'Roboto Mono', monospace;
   font-size: 3rem;
   font-weight: 700;
@@ -704,24 +1080,326 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 0.5rem;
-  display: block;
 }
 
-.metric-label {
+.metric-card p {
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--light-text);
+  margin-bottom: 0.5rem;
+}
+
+.metric-description {
+  font-size: 0.875rem;
+  color: var(--muted-text);
+  display: block;
+}
+
+/* Comparison Section */
+.comparison-section {
+  margin-top: 3rem;
+}
+
+.comparison-section h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: var(--light-text);
+}
+
+/* New Comparison Layout */
+.comparison-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+/* HyperLayer0 Highlight */
+.hyperlayer0-highlight {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 153, 255, 0.1));
+  border: 2px solid var(--primary-green);
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 255, 136, 0.2);
+}
+
+.hyperlayer0-highlight::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.blockchain-logo {
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hl0-icon {
+  width: 80px;
+  height: 80px;
+  background: var(--gradient-primary);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 auto 1rem;
+  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+}
+
+.blockchain-logo h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.highlight-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-row .stat-label {
+  font-size: 0.875rem;
+  color: var(--muted-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.highlight-value {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.superiority-badge {
+  background: var(--gradient-primary);
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+/* Other Blockchains Grid */
+.other-blockchains {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.comparison-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.comparison-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.bitcoin-card:hover { border-color: #f7931a; background: rgba(247, 147, 26, 0.05); }
+.ethereum-card:hover { border-color: #627eea; background: rgba(98, 126, 234, 0.05); }
+.solana-card:hover { border-color: #00d18c; background: rgba(0, 209, 140, 0.05); }
+.polygon-card:hover { border-color: #8247e5; background: rgba(130, 71, 229, 0.05); }
+
+.blockchain-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.metric-comparison {
-  font-size: 0.9rem;
-  color: var(--muted-text);
+.blockchain-icon {
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
-.improvement {
-  color: var(--primary-green);
+.bitcoin-card .blockchain-icon { color: #f7931a; }
+.ethereum-card .blockchain-icon { color: #627eea; }
+.solana-card .blockchain-icon { color: #00d18c; }
+.polygon-card .blockchain-icon { color: #8247e5; }
+
+.blockchain-name {
+  font-size: 1rem;
   font-weight: 600;
+  color: var(--light-text);
+}
+
+.comparison-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.stat-item .stat-label {
+  font-size: 0.75rem;
+  color: var(--muted-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-item .stat-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--light-text);
+}
+
+/* Developer Resources */
+.developer-resources {
+  padding: 80px 0;
+  background: var(--primary-blue-light);
+}
+
+.developer-resources h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.resource-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.resource-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--gradient-primary);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.resource-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.resource-card:hover::before {
+  transform: scaleY(1);
+}
+
+.resource-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.resource-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--light-text);
+}
+
+.resource-card p {
+  color: var(--muted-text);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.resource-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.resource-card li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--muted-text);
+  font-size: 0.875rem;
+}
+
+.resource-card li:before {
+  content: "▶";
+  position: absolute;
+  left: 0;
+  color: var(--primary-green);
+  font-size: 0.625rem;
+  top: 0.125rem;
 }
 
 /* Zero Burns Section */
@@ -935,11 +1613,31 @@
   .layer-2 { width: 300px; height: 300px; }
   .layer-3 { width: 350px; height: 350px; }
   
-  .components-grid {
-    grid-template-columns: 1fr;
+  .tech-grid-2x3 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
   }
   
   .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .specs-tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .spec-tab {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .comparison-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .other-blockchains {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -954,8 +1652,10 @@
   }
   
   .overview-section,
+  .technical-specifications,
   .interactive-components,
   .performance-section,
+  .developer-resources,
   .zero-burns-section,
   .architecture-cta {
     padding: 60px 0;
@@ -990,11 +1690,30 @@
     gap: 1rem;
   }
   
+  .tech-grid-2x3 {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .card-expanded {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    width: 90%;
+    max-width: 400px;
+    z-index: 100;
+  }
+  
+  .card-expanded.animate-in {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  
   .metrics-grid {
     grid-template-columns: 1fr;
   }
   
-  .metric-value {
+  .metric-card h3 {
     font-size: 2.5rem;
   }
   
@@ -1012,6 +1731,37 @@
   .detail-stats {
     grid-template-columns: repeat(2, 1fr);
   }
+  
+  .performance-tabs,
+  .specs-tabs {
+    gap: 0.5rem;
+  }
+  
+  .perf-tab,
+  .spec-tab {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .comparison-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .hyperlayer0-highlight {
+    padding: 2rem;
+  }
+  
+  .other-blockchains {
+    grid-template-columns: 1fr;
+  }
+  
+  .resources-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .spec-content .spec-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1027,8 +1777,14 @@
     font-size: 2rem;
   }
   
-  .metric-value {
+  .metric-card h3 {
     font-size: 2rem;
+  }
+  
+  .component-tooltip {
+    min-width: 200px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
@@ -1049,7 +1805,10 @@
   .arch-layer:hover,
   .interactive-card:hover,
   .metric-card:hover,
-  .zero-burns-card:hover {
+  .zero-burns-card:hover,
+  .resource-card:hover,
+  .spec-card:hover,
+  .comparison-card:hover {
     transform: none;
   }
 }
@@ -1058,7 +1817,9 @@
 .layer-component:focus,
 .interactive-card:focus,
 .primary-button:focus,
-.secondary-button:focus {
+.secondary-button:focus,
+.spec-tab:focus,
+.perf-tab:focus {
   outline: 2px solid var(--primary-green);
   outline-offset: 2px;
 }
@@ -1069,7 +1830,11 @@
   .interactive-card,
   .metric-card,
   .zero-burns-card,
-  .layer-component {
+  .layer-component,
+  .resource-card,
+  .spec-card,
+  .comparison-card,
+  .component-tooltip {
     border-width: 2px;
   }
   

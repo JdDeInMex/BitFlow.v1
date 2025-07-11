@@ -948,3 +948,55 @@
     border-width: 3px;
   }
 }
+
+/* Estilos para o seletor de modo de visualização */
+.view-mode-selector {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+.view-mode-button {
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted-text);
+}
+
+.view-mode-button.active {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  box-shadow: var(--glow-primary);
+}
+
+.view-mode-button:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.use-cases-3d-section {
+  padding: 0;
+  width: 100%;
+  margin: 0 auto;
+  background: var(--darker-bg);
+  position: relative;
+}
+
+/* Ajustes responsivos para visualização 3D */
+@media (max-width: 768px) {
+  .view-mode-selector {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .view-mode-button {
+    width: 200px;
+  }
+}
