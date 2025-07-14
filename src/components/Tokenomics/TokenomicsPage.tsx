@@ -1,5 +1,6 @@
 // src/components/Tokenomics/TokenomicsPage.tsx
 import React, { useState, useEffect } from 'react';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 // Tokenomics Page Component
 const TokenomicsPage: React.FC = () => {
@@ -9,12 +10,13 @@ const TokenomicsPage: React.FC = () => {
     presaleTarget: 0,
     currentPrice: 0
   });
+  const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
 
   // Animate numbers on mount
   useEffect(() => {
     const targets = {
       totalSupply: 9900000000,
-      presaleTarget: 1202930000,
+      presaleTarget: 100,
       currentPrice: 0.009120
     };
 
@@ -126,9 +128,9 @@ const TokenomicsPage: React.FC = () => {
         <div className="tkn-stat-card">
           <div className="tkn-stat-icon">🚀</div>
           <div className="tkn-stat-content">
-            <div className="tkn-stat-number">${formatNumber(animatedValues.presaleTarget)}</div>
+            <div className="tkn-stat-number">+{formatNumber(animatedValues.presaleTarget)}x</div>
             <div className="tkn-stat-label">Presale Target</div>
-            <div className="tkn-stat-subtitle">20 Batches: $0.009 → $0.90</div>
+            <div className="tkn-stat-subtitle">20 Batches: $0.009 → $0.90 - $1.20</div>
           </div>
         </div>
         
@@ -173,37 +175,80 @@ const TokenomicsPage: React.FC = () => {
     </div>
   );
 
+  // Função para labels externos
+  const renderCustomizedLabel = ({
+    cx, cy, midAngle, innerRadius, outerRadius, percent, index,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    const radius = outerRadius + 30;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="#fff"
+        textAnchor={x > cx ? 'start' : 'end'}
+        dominantBaseline="central"
+        fontSize={14}
+        fontWeight={700}
+        style={{ pointerEvents: 'none' }}
+      >
+        {`${distributionData[index].category}: ${distributionData[index].percentage}%`}
+      </text>
+    );
+  };
+
   const renderDistribution = () => (
     <div className="tkn-section">
       <h2>Token Distribution</h2>
-      <div className="tkn-distribution-main">
-        <div className="tkn-pie-chart-large">
-          {distributionData.map((item, index) => {
-            const startAngle = distributionData.slice(0, index).reduce((acc, curr) => acc + (curr.percentage * 3.6), 0);
-            const endAngle = startAngle + (item.percentage * 3.6);
+      <div className="tkn-distribution-main" style={{ flexDirection: 'row', alignItems: 'flex-start', gap: '3rem' }}>
+        {/* Pie Chart */}
+        <div style={{ width: 480, height: 480, minWidth: 340, padding: 10, boxSizing: 'border-box' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={distributionData}
+                dataKey="percentage"
+                nameKey="category"
+                cx="50%"
+                cy="50%"
+                outerRadius={highlightedIndex !== null ? 155 : 140}
+                labelLine={false}
+                isAnimationActive={true}
+                onMouseLeave={() => setHighlightedIndex(null)}
+              >
+                {distributionData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={entry.color}
+                    stroke={highlightedIndex === index ? "#fff" : entry.color}
+                    strokeWidth={highlightedIndex === index ? 4 : 1}
+                    cursor="pointer"
+                    onMouseEnter={() => setHighlightedIndex(index)}
+                  />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value: number) => [`${value}%`, 'Percent']} />
             
-            return (
-              <div
-                key={item.category}
-                className="tkn-pie-slice-large"
-                style={{
-                  background: `conic-gradient(from ${startAngle}deg, ${item.color} 0deg ${endAngle}deg, transparent ${endAngle}deg)`,
-                }}
-              />
-            );
-          })}
-          <div className="tkn-pie-center-large">
-            <div className="tkn-center-text-large">
-              <span className="tkn-total-supply-large">9.9B</span>
-              <span className="tkn-center-label-large">HL0 Tokens</span>
-              <span className="tkn-center-subtitle">Pure Utility Forever</span>
-            </div>
-          </div>
+            </PieChart>
+          </ResponsiveContainer>
         </div>
-        
+        {/* Legend */}
         <div className="tkn-distribution-legend-grid">
-          {distributionData.map((item) => (
-            <div key={item.category} className="tkn-legend-item-grid">
+          {distributionData.map((item, index) => (
+            <div
+              key={item.category}
+              className={`tkn-legend-item-grid${highlightedIndex === index ? ' tkn-legend-highlight' : ''}`}
+              onMouseEnter={() => setHighlightedIndex(index)}
+              onMouseLeave={() => setHighlightedIndex(null)}
+              style={{
+                boxShadow: highlightedIndex === index ? '0 0 0 3px ' + item.color : undefined,
+                borderColor: highlightedIndex === index ? item.color : undefined,
+                transition: 'box-shadow 0.2s, border-color 0.2s'
+              }}
+            >
               <div className="tkn-legend-color-large" style={{ backgroundColor: item.color }}></div>
               <div className="tkn-legend-content-grid">
                 <div className="tkn-legend-header-grid">

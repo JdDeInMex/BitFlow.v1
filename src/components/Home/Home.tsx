@@ -1213,6 +1213,7 @@ const Home: React.FC<HomeProps> = ({
                 <div className="banner-icon animated">💰</div>
                 <div className="banner-text">
                   <span className="banner-title">10000%+ GUARANTEED!</span>
+                  <span className="banner-title">ONLY BATCH 1</span>
                   <span className="banner-subtitle">
                     {formatUSD(0.0090000, 7)} → {formatUSD(1.20)} Launch • 100x Minimum Guaranteed
                   </span>

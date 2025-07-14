@@ -30,7 +30,24 @@ const About: React.FC = () => {
       {/* Mission Section */}
       <section className="mission-section">
         <div className="section-container">
-          <div className="content-grid">
+          <div className="concept-highlight-row">
+            <div className="concept-highlight-card animate-fade-in">
+              <span className="concept-logo">HyperLayer0</span>
+              <div className="concept-features-row">
+                <div className="concept-feature animate-pop">
+                  <span className="concept-icon">🚫</span>
+                  <span className="concept-label">Zero Burns</span>
+                </div>
+                <div className="concept-feature animate-pop">
+                  <span className="concept-icon">⚙️</span>
+                  <span className="concept-label">Pure Utility</span>
+                </div>
+                <div className="concept-feature animate-pop">
+                  <span className="concept-icon">🔓</span>
+                  <span className="concept-label">User Freedom</span>
+                </div>
+              </div>
+            </div>
             <div className="content-text">
               <h2>Our Mission</h2>
               <p>
@@ -65,22 +82,6 @@ const About: React.FC = () => {
                 </li>
               </ul>
             </div>
-            <div className="content-visual">
-              <div className="mission-graphic">
-                <div className="central-node">
-                  <span>HyperLayer0</span>
-                </div>
-                <div className="orbit orbit-1">
-                  <div className="satellite">Zero Burns</div>
-                </div>
-                <div className="orbit orbit-2">
-                  <div className="satellite">Pure Utility</div>
-                </div>
-                <div className="orbit orbit-3">
-                  <div className="satellite">User Freedom</div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -98,7 +99,7 @@ const About: React.FC = () => {
           <div className="vision-cards">
             <div className="vision-card">
               <div className="card-icon">
-                <div className="icon global"></div>
+                <div className="icon global">🌐</div>
               </div>
               <h3>Internet of Everything</h3>
               <p>
@@ -109,7 +110,7 @@ const About: React.FC = () => {
             
             <div className="vision-card">
               <div className="card-icon">
-                <div className="icon innovation"></div>
+                <div className="icon innovation">💡</div>
               </div>
               <h3>Genuine Utility</h3>
               <p>
@@ -120,7 +121,7 @@ const About: React.FC = () => {
             
             <div className="vision-card">
               <div className="card-icon">
-                <div className="icon ecosystem"></div>
+                <div className="icon ecosystem">🔓</div>
               </div>
               <h3>Absolute Freedom</h3>
               <p>
@@ -259,7 +260,9 @@ const About: React.FC = () => {
           
           <div className="tech-grid">
             <div className="tech-card">
-              <div className="tech-icon zk-proof"></div>
+              <div className="tech-icon zk-proof">
+                <div className="large-emoji">🌐</div>
+              </div>
               <h3>Quantum Mesh Network (QMN)</h3>
               <p>
                 Quantum network that instantly synchronizes all connected 
@@ -271,7 +274,9 @@ const About: React.FC = () => {
             </div>
             
             <div className="tech-card">
-              <div className="tech-icon sequencer"></div>
+              <div className="tech-icon sequencer">
+                <div className="large-emoji">🧠</div>
+              </div>
               <h3>Neural Consensus (NeuCon)</h3>
               <p>
                 AI-driven intelligent consensus that predicts and automatically 
@@ -283,7 +288,9 @@ const About: React.FC = () => {
             </div>
             
             <div className="tech-card">
-              <div className="tech-icon state-channels"></div>
+              <div className="tech-icon state-channels">
+                <div className="large-emoji">🌉</div>
+              </div>
               <h3>Universal Bridge Protocol</h3>
               <p>
                 Protocol that connects any existing or future blockchain 
@@ -295,7 +302,9 @@ const About: React.FC = () => {
             </div>
             
             <div className="tech-card">
-              <div className="tech-icon virtual-machine"></div>
+              <div className="tech-icon virtual-machine">
+                <div className="large-emoji">📝</div>
+              </div>
               <h3>Smart Contracts 3.0</h3>
               <p>
                 Self-evolving contracts with integrated AI that learn 
@@ -307,7 +316,9 @@ const About: React.FC = () => {
             </div>
             
             <div className="tech-card">
-              <div className="tech-icon quantum-safe"></div>
+              <div className="tech-icon quantum-safe">
+                <div className="large-emoji">🔐</div>
+              </div>
               <h3>Quantum-Safe Security</h3>
               <p>
                 Post-quantum cryptography with multidimensional signatures 
@@ -319,7 +330,9 @@ const About: React.FC = () => {
             </div>
             
             <div className="tech-card">
-              <div className="tech-icon carbon-negative"></div>
+              <div className="tech-icon carbon-negative">
+                <div className="large-emoji">🌿</div>
+              </div>
               <h3>Carbon Negative Infrastructure</h3>
               <p>
                 Infrastructure that removes 100 tons of CO₂ per year 
@@ -331,7 +344,9 @@ const About: React.FC = () => {
             </div>
 
             <div className="tech-card">
-              <div className="tech-icon hyperspeed"></div>
+              <div className="tech-icon hyperspeed">
+                <div className="large-emoji">⚡</div>
+              </div>
               <h3>HyperSpeed Engine</h3>
               <p>
                 Parallel processing with 1M+ simultaneous threads, 
@@ -343,7 +358,9 @@ const About: React.FC = () => {
             </div>
 
             <div className="tech-card">
-              <div className="tech-icon dynamic-sharding"></div>
+              <div className="tech-icon dynamic-sharding">
+                <div className="large-emoji">🧩</div>
+              </div>
               <h3>Dynamic Sharding Matrix</h3>
               <p>
                 Self-adjusting shards with elastic compute resources 
@@ -355,7 +372,9 @@ const About: React.FC = () => {
             </div>
 
             <div className="tech-card">
-              <div className="tech-icon universal-tokenization"></div>
+              <div className="tech-icon universal-tokenization">
+                <div className="large-emoji">💎</div>
+              </div>
               <h3>Universal Asset Tokenization</h3>
               <p>
                 Tokenize any real-world asset: real estate, vehicles, art, 
@@ -367,7 +386,9 @@ const About: React.FC = () => {
             </div>
 
             <div className="tech-card">
-              <div className="tech-icon metaverse-native"></div>
+              <div className="tech-icon metaverse-native">
+                <div className="large-emoji">🌌</div>
+              </div>
               <h3>Metaverse Native Infrastructure</h3>
               <p>
                 Distributed rendering, on-chain physics engine, 
@@ -379,7 +400,9 @@ const About: React.FC = () => {
             </div>
 
             <div className="tech-card">
-              <div className="tech-icon quantum-computing"></div>
+              <div className="tech-icon quantum-computing">
+                <div className="large-emoji">💫</div>
+              </div>
               <h3>Quantum Computing Integration</h3>
               <p>
                 Quantum Computing as a Service (QCaaS) for optimization, 
@@ -391,7 +414,9 @@ const About: React.FC = () => {
             </div>
 
             <div className="tech-card">
-              <div className="tech-icon iot-world"></div>
+              <div className="tech-icon iot-world">
+                <div className="large-emoji">📱</div>
+              </div>
               <h3>IoT & Real World Connectivity</h3>
               <p>
                 Connect 100B+ devices with machine-to-machine micro-payments, 
@@ -403,7 +428,9 @@ const About: React.FC = () => {
             </div>
 
             <div className="tech-card">
-              <div className="tech-icon gamefi-revolution"></div>
+              <div className="tech-icon gamefi-revolution">
+                <div className="large-emoji">🎮</div>
+              </div>
               <h3>GameFi Revolution Engine</h3>
               <p>
                 Zero latency gaming, truly owned NFT assets, 
@@ -415,7 +442,9 @@ const About: React.FC = () => {
             </div>
 
             <div className="tech-card">
-              <div className="tech-icon financial-bridge"></div>
+              <div className="tech-icon financial-bridge">
+                <div className="large-emoji">💰</div>
+              </div>
               <h3>Total Financial Bridge</h3>
               <p>
                 Native crypto cards, on-chain bank accounts, 
@@ -427,7 +456,9 @@ const About: React.FC = () => {
             </div>
 
             <div className="tech-card">
-              <div className="tech-icon analytics-ai"></div>
+              <div className="tech-icon analytics-ai">
+                <div className="large-emoji">📊</div>
+              </div>
               <h3>Real-Time Analytics & BI</h3>
               <p>
                 On-chain analytics, predictive AI models, 
@@ -439,7 +470,9 @@ const About: React.FC = () => {
             </div>
 
             <div className="tech-card">
-              <div className="tech-icon creative-economy"></div>
+              <div className="tech-icon creative-economy">
+                <div className="large-emoji">🎨</div>
+              </div>
               <h3>Complete Creative Economy</h3>
               <p>
                 Dynamic evolving NFTs, perpetual royalties, 
@@ -470,12 +503,12 @@ const About: React.FC = () => {
               <div className="stat-label">Years Combined Experience</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">25+</div>
+              <div className="stat-number">9</div>
               <div className="stat-label">Web3 Specialists</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">12+</div>
-              <div className="stat-label">PhDs in Quantum Computing</div>
+              <div className="stat-number">1</div>
+              <div className="stat-label">PhD in Quantum Computing</div>
             </div>
             <div className="stat-item">
               <div className="stat-number">1B+</div>
@@ -487,39 +520,57 @@ const About: React.FC = () => {
             <h3>Areas of Expertise</h3>
             <div className="expertise-grid">
               <div className="expertise-item">
-                <div className="expertise-icon crypto"></div>
+                <div className="expertise-icon crypto">
+                  <div className="centered-emoji">🔬</div>
+                </div>
                 <span>Quantum Computing</span>
               </div>
               <div className="expertise-item">
-                <div className="expertise-icon blockchain"></div>
+                <div className="expertise-icon blockchain">
+                  <div className="centered-emoji">🧠</div>
+                </div>
                 <span>Artificial Intelligence</span>
               </div>
               <div className="expertise-item">
-                <div className="expertise-icon security"></div>
+                <div className="expertise-icon security">
+                  <div className="centered-emoji">🔒</div>
+                </div>
                 <span>Post-Quantum Cryptography</span>
               </div>
               <div className="expertise-item">
-                <div className="expertise-icon scaling"></div>
+                <div className="expertise-icon scaling">
+                  <div className="centered-emoji">🕸️</div>
+                </div>
                 <span>Network Theory</span>
               </div>
               <div className="expertise-item">
-                <div className="expertise-icon defi"></div>
+                <div className="expertise-icon defi">
+                  <div className="centered-emoji">📡</div>
+                </div>
                 <span>Distributed Systems</span>
               </div>
               <div className="expertise-item">
-                <div className="expertise-icon gamefi"></div>
+                <div className="expertise-icon gamefi">
+                  <div className="centered-emoji">📊</div>
+                </div>
                 <span>Behavioral Economics</span>
               </div>
               <div className="expertise-item">
-                <div className="expertise-icon nft"></div>
+                <div className="expertise-icon nft">
+                  <div className="centered-emoji">🌱</div>
+                </div>
                 <span>Sustainability</span>
               </div>
               <div className="expertise-item">
-                <div className="expertise-icon tokenization"></div>
+                <div className="expertise-icon tokenization">
+                  <div className="centered-emoji">🎯</div>
+                </div>
                 <span>Incentive Design</span>
               </div>
               <div className="expertise-item">
-                <div className="expertise-icon metaverse"></div>
+                <div className="expertise-icon metaverse">
+                  <div className="centered-emoji">⚖️</div>
+                </div>
                 <span>Decentralized Governance</span>
               </div>
             </div>
@@ -541,7 +592,7 @@ const About: React.FC = () => {
               
               <div className="philosophy-principles">
                 <div className="principle-item">
-                  <span className="principle-icon">🆓</span>
+                  <span className="principle-icon">🗽</span>
                   <div>
                     <h4>Absolute Freedom</h4>
                     <p>Your tokens are yours. Use them however you want, whenever you want, without penalties.</p>
@@ -627,7 +678,7 @@ const About: React.FC = () => {
                 </div>
                 
                 <div className="feature-item">
-                  <span className="feature-icon">🧠</span>
+                  <span className="feature-icon">🎓</span>
                   <div>
                     <h4>Education and Innovation</h4>
                     <p>Workshops, hackathons and resources to train the next generation</p>
@@ -635,7 +686,7 @@ const About: React.FC = () => {
                 </div>
                 
                 <div className="feature-item">
-                  <span className="feature-icon">🚀</span>
+                  <span className="feature-icon">🏗️</span>
                   <div>
                     <h4>Building Together</h4>
                     <p>Developers, users and visionaries united by the same goal</p>
@@ -689,7 +740,7 @@ const About: React.FC = () => {
               <div className="timeline-content">
                 <h3>2025 - Foundation</h3>
                 <p>
-                  Mainnet launch. First inter-blockchain connections. 
+                  First inter-blockchain connections. 
                   Beginning of the era of true interoperability.
                 </p>
               </div>

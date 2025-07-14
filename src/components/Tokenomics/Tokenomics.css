@@ -12,3 +12,10 @@
 .tokenomics-page {
   padding-top: 80px; /* Ajustar para o header fixo */
 }
+
+.tkn-legend-highlight {
+  box-shadow: 0 0 0 3px var(--tkn-legend-color, #00ff88);
+  border-color: var(--tkn-legend-color, #00ff88);
+  z-index: 2;
+  position: relative;
+}
