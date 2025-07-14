@@ -109,17 +109,17 @@ const formatBalance = (balance: any): string => {
 };
 
 // Logo component - UPDATED FOR HYPERLAYER0
-const Logo: React.FC<{ onClick: () => void }> = React.memo(({ onClick }) => (
-  <div className="header-logo" onClick={onClick}>
-    <div className="logo-icon">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <defs>
-          <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#00ff88" />
-            <stop offset="50%" stopColor="#00ccff" />
-            <stop offset="100%" stopColor="#ff6b35" />
-          </linearGradient>
-        </defs>
+//const Logo: React.FC<{ onClick: () => void }> = React.memo(({ onClick }) => (
+  //<div className="header-logo" onClick={onClick}>
+    //<div className="logo-icon">
+      //<svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        //<defs>
+          //<linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            //<stop offset="0%" stopColor="#00ff88" />
+            //<stop offset="50%" stopColor="#00ccff" />
+            //<stop offset="100%" stopColor="#ff6b35" />
+          //</linearGradient>
+        /*</defs>
         <circle cx="16" cy="16" r="14" fill="url(#logoGradient)" />
         <path 
           d="M10 12 L16 8 L22 12 L16 16 Z" 
@@ -141,6 +141,21 @@ const Logo: React.FC<{ onClick: () => void }> = React.memo(({ onClick }) => (
     <span className="logo-text">HyperLayer0</span>
   </div>
 ));
+*/
+const Logo: React.FC<{ onClick: () => void }> = React.memo(({ onClick }) => (
+  <div className="header-logo" onClick={onClick}>
+    <img
+      src="/branco.png"
+      alt="HyperLayer0 Logo"
+      className="logo-img"
+      width={32}
+      height={32}
+      style={{ objectFit: 'contain' }}
+    />
+    <span className="logo-text">HyperLayer0</span>
+  </div>
+));
+
 
 Logo.displayName = 'Logo';
 

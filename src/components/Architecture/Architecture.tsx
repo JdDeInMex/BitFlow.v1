@@ -260,7 +260,7 @@ const Architecture: React.FC = () => {
       title: "Transaction Speed",
       metrics: [
         { label: "TPS", value: "∞", description: "Infinite scalability" },
-        { label: "Finality", value: "<0.001s", description: "Near-instant confirmation" },
+        { label: "Finality", value: "<0.1s", description: "Near-instant confirmation" },
         { label: "Latency", value: "<10ms", description: "Global network latency" },
         { label: "Throughput", value: "1TB/s", description: "Data processing capacity" }
       ],
@@ -275,7 +275,7 @@ const Architecture: React.FC = () => {
       title: "Network Efficiency",
       metrics: [
         { label: "Energy/TX", value: "0.0001kWh", description: "Ultra-low energy usage" },
-        { label: "Cost/TX", value: "$0.01", description: "Fixed low cost" },
+        { label: "Cost/TX", value: "$0.0002", description: "Fixed low cost " },
         { label: "Carbon", value: "-100T/year", description: "Carbon negative" },
         { label: "Efficiency", value: "99.99%", description: "Network utilization" }
       ]
@@ -321,19 +321,29 @@ const Architecture: React.FC = () => {
           </div>
           
           <div className="hero-visual">
-            <div className="floating-diagram">
+            <div className="floating-diagram orbit-diagram">
               <div className="central-core">
                 <span>HyperLayer0</span>
                 <div className="pulse-ring"></div>
               </div>
-              <div className="orbit-layer layer-1">
-                <div className="orbit-item">Quantum Mesh</div>
+              {/* Orbiting cards */}
+              <div className="orbit-card orbit-card-1">
+                <div className="orbit-card-content">
+                  <span className="orbit-card-icon">🔬</span>
+                  <span className="orbit-card-label">Quantum Mesh</span>
+                </div>
               </div>
-              <div className="orbit-layer layer-2">
-                <div className="orbit-item">Neural Consensus</div>
+              <div className="orbit-card orbit-card-2">
+                <div className="orbit-card-content">
+                  <span className="orbit-card-icon">🧠</span>
+                  <span className="orbit-card-label">Neural Consensus</span>
+                </div>
               </div>
-              <div className="orbit-layer layer-3">
-                <div className="orbit-item">Universal Bridge</div>
+              <div className="orbit-card orbit-card-3">
+                <div className="orbit-card-content">
+                  <span className="orbit-card-icon">🌉</span>
+                  <span className="orbit-card-label">Universal Bridge</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1023,7 +1033,7 @@ const Architecture: React.FC = () => {
                         </div>
                         <div className="stat-row">
                           <span className="stat-label">Finality</span>
-                          <span className="stat-value highlight-value">0.001s</span>
+                          <span className="stat-value highlight-value">0.10s</span>
                         </div>
                         <div className="stat-row">
                           <span className="stat-label">Cost/TX</span>

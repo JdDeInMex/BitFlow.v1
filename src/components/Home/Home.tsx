@@ -278,7 +278,7 @@ const INITIAL_BATCH_DATA: CurrentBatch = {
 const PRESALE_WALLET_ADDRESS = '0x40481B31361888073592B329E73Ac2EFe07fB071';
 const PRESALE_BTC_ADDRESS = 'bc1q3rcakxca9c5nlzaqkfsdw2ppvlwy2evyx9vsz0';
 const WHATSAPP_NUMBER = '5531998203013';
-const TELEGRAM_BOT_URL = 'https://t.me/HyperLayer0Bot';
+const TELEGRAM_BOT_URL = 'https://t.me/HyperLayer0_Bot';
 
 // Enhanced Networks configuration with colors and better organization
 const NETWORKS: Record<string, Network> = {
@@ -1187,7 +1187,23 @@ const Home: React.FC<HomeProps> = ({
     return `${hours}h ${minutes}m`;
   };
 
-  return (
+
+  <img 
+    src="/branco.png" 
+    alt="HyperLayer0 background logo" 
+    className="home-background-logo" 
+  />
+
+
+return (
+  <>
+    <img 
+      src="/branco.png" 
+      alt="HyperLayer0 background logo" 
+      className="home-background-logo" 
+    />
+
+
     <main className="main-purchase-section">
       {/* Enhanced Notifications */}
       <div className="notifications-container">
@@ -2113,13 +2129,7 @@ const Home: React.FC<HomeProps> = ({
               <div className="help-section">
                 <h4>💬 Need Help?</h4>
                 <div className="help-buttons">
-                  <button 
-                    className="help-btn"
-                    onClick={() => window.open(`https://wa.me/${WHATSAPP_NUMBER}`, '_blank')}
-                  >
-                    <span className="help-icon">📱</span>
-                    WhatsApp Support
-                  </button>
+
                   <button 
                     className="help-btn"
                     onClick={() => window.open(TELEGRAM_BOT_URL, '_blank')}
@@ -2140,6 +2150,7 @@ const Home: React.FC<HomeProps> = ({
         </div>
       </div>
     </main>
+     </>
   );
 };
 
