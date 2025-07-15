@@ -70,12 +70,17 @@ interface NavigationItem {
   icon?: string;
 }
 
+interface WalletInfo {
+  address: string;
+  balance: any;
+  icon: string;
+}
 
 // Navigation items - UPDATED WITH TOKENOMICS
 const NAVIGATION_ITEMS: NavigationItem[] = [
   { key: 'home', label: 'Home', icon: '🏠' },
   { key: 'about', label: 'About', icon: 'ℹ️' },
-  { key: 'tokenomics', label: 'Tokenomics', icon: '💎' }, // NOVA ABA
+  { key: 'tokenomics', label: 'Tokenomics', icon: '💎' },
   { key: 'architecture', label: 'Architecture', icon: '🏗️' },
   { key: 'use-cases', label: 'Use Cases', icon: '💡' },
   { key: 'roadmap', label: 'Roadmap', icon: '🗺️' }
@@ -109,39 +114,6 @@ const formatBalance = (balance: any): string => {
 };
 
 // Logo component - UPDATED FOR HYPERLAYER0
-//const Logo: React.FC<{ onClick: () => void }> = React.memo(({ onClick }) => (
-  //<div className="header-logo" onClick={onClick}>
-    //<div className="logo-icon">
-      //<svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        //<defs>
-          //<linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            //<stop offset="0%" stopColor="#00ff88" />
-            //<stop offset="50%" stopColor="#00ccff" />
-            //<stop offset="100%" stopColor="#ff6b35" />
-          //</linearGradient>
-        /*</defs>
-        <circle cx="16" cy="16" r="14" fill="url(#logoGradient)" />
-        <path 
-          d="M10 12 L16 8 L22 12 L16 16 Z" 
-          fill="white" 
-          opacity="0.9"
-        />
-        <path 
-          d="M10 16 L16 12 L22 16 L16 20 Z" 
-          fill="white" 
-          opacity="0.7"
-        />
-        <path 
-          d="M10 20 L16 16 L22 20 L16 24 Z" 
-          fill="white" 
-          opacity="0.5"
-        />
-      </svg>
-    </div>
-    <span className="logo-text">HyperLayer0</span>
-  </div>
-));
-*/
 const Logo: React.FC<{ onClick: () => void }> = React.memo(({ onClick }) => (
   <div className="header-logo" onClick={onClick}>
     <img
@@ -155,7 +127,6 @@ const Logo: React.FC<{ onClick: () => void }> = React.memo(({ onClick }) => (
     <span className="logo-text">HyperLayer0</span>
   </div>
 ));
-
 
 Logo.displayName = 'Logo';
 
@@ -180,69 +151,131 @@ const Navigation: React.FC<{
 
 Navigation.displayName = 'Navigation';
 
-// Mobile navigation component
+// Mobile navigation component - VERSÃO CORRIGIDA
 const MobileNavigation: React.FC<{
   isOpen: boolean;
   onNavigate: (page: string) => void;
   onClose: () => void;
   currentPage?: string;
-  walletInfo?: {
-    address: string;
-    balance: any;
-    icon: string;
-  };
-}> = React.memo(({ isOpen, onNavigate, onClose, currentPage, walletInfo }) => (
-  <>
-    <nav className={`mobile-nav ${isOpen ? 'open' : ''}`}>
-      <div className="mobile-nav-content">
-        {NAVIGATION_ITEMS.map(({ key, label, icon }) => (
-          <button 
-            key={key}
-            className={`mobile-nav-item ${currentPage === key ? 'active' : ''}`}
-            onClick={() => {
-              onNavigate(key);
-              onClose();
-            }}
-            type="button"
-          >
-            <span>{icon}</span>
-            {label}
-          </button>
-        ))}
-        
-        {walletInfo && (
-          <div className="mobile-wallet-info">
-            <div className="mobile-wallet-details">
-              <span>{walletInfo.icon}</span>
-              <div>
-                <div>{formatAddress(walletInfo.address)}</div>
-                {walletInfo.balance && (
-                  <div className="mobile-balance">
-                    {formatBalance(walletInfo.balance)}
-                  </div>
-                )}
+  walletInfo?: WalletInfo;
+}> = React.memo(({ isOpen, onNavigate, onClose, currentPage, walletInfo }) => {
+  
+  // Handler para navegação mobile com debug detalhado
+  const handleMobileNavigation = useCallback((page: string, event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    console.log('🔥 Mobile navigation clicked:', page);
+    console.log('🔥 Event target:', event.target);
+    console.log('🔥 Event currentTarget:', event.currentTarget);
+    
+    // Fechar menu primeiro
+    onClose();
+    
+    // Pequeno delay para garantir que o menu fecha antes da navegação
+    setTimeout(() => {
+      console.log('🔥 Triggering navigation to:', page);
+      onNavigate(page);
+      
+      // Fallback: também disparar evento customizado
+      const navigationEvent = new CustomEvent('navigate', { 
+        detail: page,
+        bubbles: true,
+        cancelable: true
+      });
+      
+      console.log('🔥 Dispatching custom event:', navigationEvent);
+      window.dispatchEvent(navigationEvent);
+    }, 100);
+  }, [onNavigate, onClose]);
+
+  // Prevenir propagação no container
+  const handleContentClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+  }, []);
+
+  // Handler para overlay
+  const handleOverlayClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onClose();
+  }, [onClose]);
+
+  // Handler para touch events
+  const handleOverlayTouch = useCallback((event: React.TouchEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onClose();
+  }, [onClose]);
+
+  // Handler para teclas
+  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      onClose();
+    }
+  }, [onClose]);
+
+  return (
+    <>
+      <nav className={`mobile-nav ${isOpen ? 'open' : ''}`}>
+        <div className="mobile-nav-content" onClick={handleContentClick}>
+          {NAVIGATION_ITEMS.map(({ key, label, icon }) => (
+            <button 
+              key={key}
+              className={`mobile-nav-item ${currentPage === key ? 'active' : ''}`}
+              onClick={(event) => handleMobileNavigation(key, event)}
+              type="button"
+              style={{ 
+                pointerEvents: 'auto',
+                cursor: 'pointer',
+                touchAction: 'manipulation',
+                WebkitTouchCallout: 'none',
+                WebkitUserSelect: 'none',
+                userSelect: 'none'
+              }}
+            >
+              <span>{icon}</span>
+              {label}
+            </button>
+          ))}
+          
+          {walletInfo && (
+            <div className="mobile-wallet-info">
+              <div className="mobile-wallet-details">
+                <span>{walletInfo.icon}</span>
+                <div>
+                  <div>{formatAddress(walletInfo.address)}</div>
+                  {walletInfo.balance && (
+                    <div className="mobile-balance">
+                      {formatBalance(walletInfo.balance)}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
-    </nav>
+          )}
+        </div>
+      </nav>
 
-    {isOpen && (
-      <div 
-        className="mobile-overlay"
-        onClick={onClose}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            onClose();
-          }
-        }}
-      />
-    )}
-  </>
-));
+      {isOpen && (
+        <div 
+          className="mobile-overlay"
+          onClick={handleOverlayClick}
+          onTouchEnd={handleOverlayTouch}
+          role="button"
+          tabIndex={0}
+          onKeyDown={handleKeyDown}
+          style={{
+            pointerEvents: 'auto',
+            cursor: 'pointer',
+            touchAction: 'manipulation'
+          }}
+        />
+      )}
+    </>
+  );
+});
 
 MobileNavigation.displayName = 'MobileNavigation';
 
@@ -378,12 +411,21 @@ const HeaderContent: React.FC<HeaderProps> = ({
     }
   }, [wagmiConnected, address, isConnected, onConnect, onDisconnect, connector]);
 
-  // Handle navigation
+  // Handle navigation - VERSÃO MELHORADA COM DEBUG
   const handleNavigate = useCallback((page: string) => {
+    console.log('🚀 Navigation requested for page:', page);
+    
     if (navigateToPage) {
+      console.log('🚀 Using navigateToPage prop');
       navigateToPage(page);
     } else {
-      window.dispatchEvent(new CustomEvent('navigate', { detail: page }));
+      console.log('🚀 Using custom event fallback');
+      const event = new CustomEvent('navigate', { 
+        detail: page,
+        bubbles: true,
+        cancelable: true
+      });
+      window.dispatchEvent(event);
     }
   }, [navigateToPage]);
 
@@ -404,15 +446,21 @@ const HeaderContent: React.FC<HeaderProps> = ({
 
   // Handle mobile menu toggle
   const handleMenuToggle = useCallback(() => {
-    setIsMenuOpen(prev => !prev);
+    console.log('🔥 Mobile menu toggle clicked');
+    setIsMenuOpen(prev => {
+      const newState = !prev;
+      console.log('🔥 Menu state changing to:', newState);
+      return newState;
+    });
   }, []);
 
   const handleMenuClose = useCallback(() => {
+    console.log('🔥 Mobile menu closing');
     setIsMenuOpen(false);
   }, []);
 
   // Memoized wallet info for mobile
-  const mobileWalletInfo = useMemo(() => {
+  const mobileWalletInfo = useMemo((): WalletInfo | undefined => {
     if (!wagmiConnected || !address) return undefined;
     
     return {
@@ -446,6 +494,12 @@ const HeaderContent: React.FC<HeaderProps> = ({
             onClick={handleMenuToggle}
             type="button"
             aria-label="Toggle mobile menu"
+            style={{
+              touchAction: 'manipulation',
+              WebkitTouchCallout: 'none',
+              WebkitUserSelect: 'none',
+              userSelect: 'none'
+            }}
           >
             <div className={`hamburger ${isMenuOpen ? 'active' : ''}`}>
               <span></span>

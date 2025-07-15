@@ -7,7 +7,7 @@ import UseCases from './components/UseCases/UseCases';
 import Roadmap from './components/Roadmap/Roadmap';
 import Footer from './components/Footer/Footer';
 import About from './components/About/About';
-import Home from './components/home/Home';
+import Home from './components/Home/Home';
 import Tokenomics from './components/Tokenomics/Tokenomics.tsx';
 //import Solutions from './components/Solutions/Solutions.tsx'; // Nova importação
 

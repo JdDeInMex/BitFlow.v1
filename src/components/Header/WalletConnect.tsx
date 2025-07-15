@@ -20,6 +20,12 @@ interface WalletOption {
   checkInstalled: () => boolean;
 }
 
+interface WindowWithEthereum extends Window {
+  ethereum?: any;
+}
+
+declare const window: WindowWithEthereum;
+
 // Constants
 const PROJECT_ID = '0e4c77fcfecbb83c15fe4fbf96791f8b';
 
@@ -29,11 +35,11 @@ let appKit: any = null;
 // Wallet detection utilities
 const walletDetectors = {
   metamask: () => {
-    const ethereum = (window as any).ethereum;
+    const ethereum = window.ethereum;
     return !!(ethereum && ethereum.isMetaMask && !ethereum.isTrust);
   },
   trustwallet: () => {
-    const ethereum = (window as any).ethereum;
+    const ethereum = window.ethereum;
     return !!(ethereum && (ethereum.isTrust || ethereum.isTrustWallet));
   },
   walletconnect: () => true // Always available via WalletConnect
@@ -48,7 +54,7 @@ const walletConnectors = {
     }
 
     try {
-      const ethereum = (window as any).ethereum;
+      const ethereum = window.ethereum;
       
       // Request account access
       const accounts = await ethereum.request({
@@ -89,7 +95,7 @@ const walletConnectors = {
     }
 
     try {
-      const ethereum = (window as any).ethereum;
+      const ethereum = window.ethereum;
       
       // Request account access
       const accounts = await ethereum.request({
@@ -155,14 +161,14 @@ const initializeAppKit = async (
       projectId: PROJECT_ID,
       networks: [mainnet, arbitrum, bsc, polygon],
       metadata: {
-        name: 'BitFlow App',
-        description: 'BitFlow DeFi Platform',
+        name: 'HyperLayer0',
+        description: 'The Future of Pure Utility Infrastructure',
         url: window.location.origin,
         icons: [`${window.location.origin}/favicon.ico`]
       },
       themeMode: 'dark',
       themeVariables: {
-        '--w3m-accent': '#f7931a'
+        '--w3m-accent': '#00ff88'
       }
     });
 
@@ -225,7 +231,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
         }
 
         // Check injected wallet (MetaMask/Trust Wallet)
-        const ethereum = (window as any).ethereum;
+        const ethereum = window.ethereum;
         if (ethereum && !isConnected) {
           const accounts = await ethereum.request({ method: 'eth_accounts' });
           if (accounts.length > 0) {
@@ -244,7 +250,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
 
   // Listen for account changes
   useEffect(() => {
-    const ethereum = (window as any).ethereum;
+    const ethereum = window.ethereum;
     if (!ethereum) return;
 
     const handleAccountsChanged = (accounts: string[]) => {
@@ -336,12 +342,12 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
     setError('');
   }, []);
 
-  // Styles object
+  // Styles object com altura ajustada
   const styles = useMemo(() => ({
     container: { display: 'flex', alignItems: 'center' },
     
     button: {
-      background: 'linear-gradient(135deg, #f7931a, #ff8c00)',
+      background: 'linear-gradient(135deg, #00ff88, #00cc6a)',
       border: 'none',
       color: 'white',
       padding: '12px 24px',
@@ -354,7 +360,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
       fontFamily: 'Montserrat, sans-serif',
       textTransform: 'uppercase' as const,
       letterSpacing: '0.5px',
-      boxShadow: '0 4px 15px rgba(247, 147, 26, 0.3)'
+      boxShadow: '0 4px 15px rgba(0, 255, 136, 0.3)'
     },
     
     walletInfo: {
@@ -392,27 +398,31 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
     
     overlay: {
       position: 'fixed' as const,
-      top: 0, left: 0, right: 0, bottom: 0,
+      top: 0, 
+      left: 0, 
+      right: 0, 
+      bottom: 0,
       background: 'rgba(0,0,0,0.8)',
       backdropFilter: 'blur(10px)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000,
-      animation: 'fadeIn 0.3s ease'
+      zIndex: 2000, // Aumentado para ficar acima do header
+      animation: 'fadeIn 0.3s ease',
+      padding: '20px'
     },
     
     modal: {
-      background: 'linear-gradient(135deg, rgba(10, 14, 23, 0.95), rgba(247, 147, 26, 0.1))',
+      background: 'linear-gradient(135deg, rgba(10, 14, 23, 0.95), rgba(0, 255, 136, 0.1))',
       borderRadius: '24px',
       width: '100%',
-      maxWidth: '450px',
-      maxHeight: '90vh',
+      maxWidth: '420px',
+      maxHeight: '500px', // Altura reduzida
       margin: '20px',
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column' as const,
-      border: '1px solid rgba(247, 147, 26, 0.2)',
+      border: '1px solid rgba(0, 255, 136, 0.2)',
       boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
       backdropFilter: 'blur(20px)'
     },
@@ -421,14 +431,15 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: '24px',
-      borderBottom: '1px solid rgba(255,255,255,0.1)'
+      padding: '20px 24px',
+      borderBottom: '1px solid rgba(255,255,255,0.1)',
+      flexShrink: 0
     },
     
     title: { 
       margin: 0, 
       color: 'white', 
-      fontSize: '20px', 
+      fontSize: '18px', 
       fontWeight: '600',
       fontFamily: 'Montserrat, sans-serif'
     },
@@ -437,22 +448,22 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
       background: 'rgba(255, 255, 255, 0.1)',
       border: '1px solid rgba(255, 255, 255, 0.2)',
       color: 'rgba(255, 255, 255, 0.7)',
-      width: '40px',
-      height: '40px',
-      borderRadius: '12px',
+      width: '36px',
+      height: '36px',
+      borderRadius: '10px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      fontSize: '18px',
+      fontSize: '16px',
       cursor: 'pointer',
       transition: 'all 0.3s ease'
     },
     
     list: {
-      padding: '24px',
+      padding: '20px 24px',
       display: 'flex',
       flexDirection: 'column' as const,
-      gap: '16px',
+      gap: '12px',
       overflowY: 'auto' as const,
       flex: 1
     },
@@ -461,10 +472,10 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
       display: 'flex',
       alignItems: 'center',
       gap: '16px',
-      padding: '20px',
+      padding: '16px',
       background: 'rgba(255,255,255,0.05)',
       border: '1px solid rgba(255,255,255,0.1)',
-      borderRadius: '16px',
+      borderRadius: '14px',
       cursor: 'pointer',
       transition: 'all 0.3s ease',
       position: 'relative' as const,
@@ -472,16 +483,16 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
     },
     
     icon: {
-      width: '48px',
-      height: '48px',
-      background: 'rgba(247, 147, 26, 0.1)',
-      borderRadius: '12px',
+      width: '40px',
+      height: '40px',
+      background: 'rgba(0, 255, 136, 0.1)',
+      borderRadius: '10px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      fontSize: '24px',
+      fontSize: '20px',
       flexShrink: 0,
-      border: '1px solid rgba(247, 147, 26, 0.2)'
+      border: '1px solid rgba(0, 255, 136, 0.2)'
     },
     
     details: { flex: 1 },
@@ -490,41 +501,41 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
       color: 'white', 
       fontWeight: '600', 
       marginBottom: '4px',
-      fontSize: '16px',
+      fontSize: '15px',
       fontFamily: 'Montserrat, sans-serif'
     },
     
     desc: { 
       color: 'rgba(255,255,255,0.7)', 
-      fontSize: '14px',
+      fontSize: '13px',
       fontFamily: 'Inter, sans-serif'
     },
     
     loading: { 
-      fontSize: '20px', 
+      fontSize: '18px', 
       animation: 'spin 1s infinite linear',
       color: 'rgba(255, 255, 255, 0.7)'
     },
     
     badge: {
-      background: 'rgba(247, 147, 26, 0.2)',
-      color: '#f7931a',
-      padding: '6px 12px',
-      borderRadius: '8px',
-      fontSize: '12px',
+      background: 'rgba(0, 255, 136, 0.2)',
+      color: '#00ff88',
+      padding: '4px 10px',
+      borderRadius: '6px',
+      fontSize: '11px',
       fontWeight: '600',
       textTransform: 'uppercase' as const,
       letterSpacing: '0.5px'
     },
     
     error: {
-      margin: '0 24px 24px',
-      padding: '16px',
+      margin: '0 24px 20px',
+      padding: '14px',
       background: 'rgba(244, 67, 54, 0.1)',
       border: '1px solid rgba(244, 67, 54, 0.3)',
-      borderRadius: '12px',
+      borderRadius: '10px',
       color: '#F44336',
-      fontSize: '14px',
+      fontSize: '13px',
       fontFamily: 'Inter, sans-serif'
     }
   }), [isConnecting]);
@@ -539,12 +550,12 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
           onMouseEnter={(e) => {
             if (!isConnecting) {
               e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 8px 25px rgba(247, 147, 26, 0.4)';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 255, 136, 0.4)';
             }
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 4px 15px rgba(247, 147, 26, 0.3)';
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(0, 255, 136, 0.3)';
           }}
         >
           {isConnecting ? 'Connecting...' : 'Connect Wallet'}
@@ -605,8 +616,8 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
                   disabled={isConnecting}
                   onMouseEnter={(e) => {
                     if (!isConnecting) {
-                      e.currentTarget.style.background = 'rgba(247, 147, 26, 0.1)';
-                      e.currentTarget.style.borderColor = 'rgba(247, 147, 26, 0.3)';
+                      e.currentTarget.style.background = 'rgba(0, 255, 136, 0.1)';
+                      e.currentTarget.style.borderColor = 'rgba(0, 255, 136, 0.3)';
                       e.currentTarget.style.transform = 'translateY(-2px)';
                     }
                   }}
@@ -654,7 +665,8 @@ const WalletConnect: React.FC<WalletConnectProps> = ({
         @media (max-width: 480px) {
           .wallet-modal { 
             margin: 10px !important; 
-            max-width: none !important; 
+            max-width: none !important;
+            max-height: 70vh !important;
           }
         }
       `}</style>
