@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import './Home.css';
+import './PoweredBy.css';
 import { 
   switchToNetwork, 
   getWalletBalance, 
@@ -286,11 +287,17 @@ const Home: React.FC<HomeProps> = ({
 
   return (
     <>
-      <img 
-        src="/branco.png" 
-        alt="HyperLayer0 background logo" 
-        className="home-background-logo" 
-      />
+      {/* Powered by Banner */}
+      <div className="powered-by-banner">
+        <div className="powered-by-content">
+          <span className="powered-by-text">Powered by</span>
+          <img 
+            src="/beset.png" 
+            alt="Beset" 
+            className="beset-logo" 
+          />
+        </div>
+      </div>
 
       <main className="main-purchase-section">
         {/* Enhanced Notifications */}
@@ -319,7 +326,7 @@ const Home: React.FC<HomeProps> = ({
                     <span className="banner-title">PRE-SALE STARTING SOON!</span>
                     <span className="banner-title">PREPARE FOR 10000%+ RETURNS!</span>
                     <span className="banner-subtitle">
-                      {formatUSD(0.0090000, 7)} → {formatUSD(1.20)} Launch • 133x Minimum Guaranteed
+                      {formatUSD(0.0090000, 7)} → {formatUSD(1.20)} Launch • 100x Minimum Guaranteed
                     </span>
                   </div>
                   <div className="banner-stats">

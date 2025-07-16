@@ -1,0 +1,279 @@
+/* Header Adjustment for Powered by Banner Below */
+
+/* Header positioning - volta ao normal */
+.header {
+  position: fixed;
+  top: 0; /* Volta ao topo */
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Acima do banner */
+  background: rgba(10, 10, 15, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.header.scrolled {
+  background: rgba(10, 10, 15, 0.98);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile menu também volta ao normal */
+.mobile-nav {
+  position: fixed;
+  top: 70px; /* Embaixo do header */
+  left: 0;
+  right: 0;
+  z-index: 999; /* Entre header e banner */
+  background: rgba(10, 10, 15, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateY(-100%);
+  transition: all 0.3s ease;
+}
+
+.mobile-nav.open {
+  transform: translateY(0);
+}
+
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav.open + .mobile-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Adjust main content positioning */
+.main-purchase-section {
+  margin-top: 120px; /* Header (70px) + Banner (50px) */
+  padding-top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .mobile-nav {
+    top: 65px; /* Adjust for mobile header */
+  }
+  
+  .main-purchase-section {
+    margin-top: 110px; /* Header (65px) + Banner (45px) */
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-nav {
+    top: 60px; /* Adjust for mobile header */
+  }
+  
+  .main-purchase-section {
+    margin-top: 100px; /* Header (60px) + Banner (40px) */
+  }
+}
+
+/* Hide banner on scroll (optional) */
+.powered-by-banner.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.header.scrolled + .powered-by-banner.hidden {
+  transform: translateY(-100%);
+}
+
+.powered-by-banner.hidden ~ .main-purchase-section {
+  margin-top: 70px; /* Only header height */
+}
+
+/* Smooth transitions for all elements */
+.header,
+.mobile-nav,
+.main-purchase-section,
+.powered-by-banner {
+  transition: all 0.3s ease;
+}
+
+/* Ensure wallet modal appears above everything */
+.w3m-modal {
+  z-index: 2000 !important;
+}
+
+/* AppKit modal overlay */
+.w3m-modal-overlay {
+  z-index: 1999 !important;
+}
+
+/* Notification adjustments */
+.notifications-container {
+  position: fixed;
+  top: 130px; /* Header (70px) + Banner (50px) + margin (10px) */
+  right: 20px;
+  z-index: 1500;
+  transition: top 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .notifications-container {
+    top: 120px; /* Header (65px) + Banner (45px) + margin (10px) */
+  }
+}
+
+@media (max-width: 480px) {
+  .notifications-container {
+    top: 110px; /* Header (60px) + Banner (40px) + margin (10px) */
+  }
+}
+
+/* When scrolled, adjust notifications */
+.header.scrolled ~ .main-purchase-section .notifications-container {
+  top: 80px; /* Only header + margin */
+}
+
+/* Additional header container adjustments */
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  position: relative;
+}
+
+/* Logo adjustments */
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.header-logo:hover {
+  transform: scale(1.05);
+}
+
+.logo-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.logo-text {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Navigation adjustments */
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-item {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+  font-family: 'Inter', sans-serif;
+}
+
+.nav-item:hover {
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.1);
+}
+
+.nav-item.active {
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.15);
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: #00ff88;
+  border-radius: 50%;
+}
+
+/* Mobile menu button */
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Hamburger menu */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 24px;
+  height: 18px;
+}
+
+.hamburger span {
+  width: 100%;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 1px;
+  transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Show mobile menu button on smaller screens */
+@media (max-width: 968px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+  
+  .desktop-nav {
+    display: none;
+  }
+}
