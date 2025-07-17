@@ -228,8 +228,7 @@ const INITIAL_BATCH_DATA: CurrentBatch = {
 };
 
 // Enhanced constants
-const WHATSAPP_NUMBER = '5531998203013';
-const TELEGRAM_BOT_URL = 'https://t.me/HyperLayer0_Bot';
+const TELEGRAM_BOT_URL = 'https://t.me/HyperLayer0';
 
 // Enhanced utility functions
 const formatNumber = (num: number) => num.toString().padStart(2, '0');

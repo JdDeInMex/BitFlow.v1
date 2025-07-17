@@ -774,7 +774,7 @@ Phase 4: Maturity (2027+)
         </div>
       )}
 
-      <style jsx>{`
+      <style >{`
         /* Footer Styles */
         .footer {
           background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);

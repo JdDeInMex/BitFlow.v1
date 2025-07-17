@@ -466,7 +466,7 @@ Phase 4: Advanced Features (2027+)
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .document-viewer {
           min-height: 100vh;
           background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);

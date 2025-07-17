@@ -84,6 +84,7 @@ body {
   .powered-by-banner {
     padding: 6px 0;
     top: 5rem; /* Ajuste para o header móvel */
+    margin-top: 0px; /* Remove espaço extra */
   }
   
   .powered-by-content {
