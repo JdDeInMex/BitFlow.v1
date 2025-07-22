@@ -56,16 +56,15 @@ const TokenomicsPage: React.FC = () => {
   };
 
   const distributionData = [
-    { category: 'Presale (Base)', percentage: 35, tokens: 3465000000, color: '#00ff88', description: 'Main fundraising allocation' },
-    { category: 'Presale Bonus', percentage: 10, tokens: 990000000, color: '#00ccff', description: 'Incentive bonuses for early supporters' },
-    { category: 'Staking Rewards', percentage: 25, tokens: 2475000000, color: '#ff6b35', description: '100-1000% APR rewards pool' },
-    { category: 'Liquidity', percentage: 12, tokens: 1188000000, color: '#8b5cf6', description: 'DEX/CEX market making' },
-    { category: 'Development', percentage: 7, tokens: 693000000, color: '#f59e0b', description: 'Ecosystem development' },
+    { category: 'Presale (Base)', percentage: 55, tokens: 3465000000, color: '#00ff88', description: 'Main fundraising allocation' },
+    { category: 'Presale Bonus', percentage: 5, tokens: 990000000, color: '#00ccff', description: 'Incentive bonuses for early supporters' },
+    { category: 'Staking Rewards', percentage: 15, tokens: 2475000000, color: '#ff6b35', description: '100-1000% APR rewards pool' },
+    { category: 'Liquidity', percentage: 10, tokens: 1188000000, color: '#8b5cf6', description: 'DEX/CEX market making' },
+    { category: 'Development', percentage: 5, tokens: 693000000, color: '#f59e0b', description: 'Ecosystem development' },
     { category: 'Team', percentage: 5, tokens: 495000000, color: '#ef4444', description: '4-year vesting with 1-year cliff' },
     { category: 'Marketing', percentage: 3, tokens: 297000000, color: '#06b6d4', description: '2-year vesting for growth' },
-    { category: 'Initial Burn', percentage: 2, tokens: 198000000, color: '#6b7280', description: 'Day 1 deflation mechanism' },
-    { category: 'Advisors', percentage: 0.8, tokens: 79200000, color: '#ec4899', description: '2-year vesting for expertise' },
-    { category: 'Airdrops', percentage: 0.2, tokens: 19800000, color: '#10b981', description: '1-year community rewards' }
+    { category: 'Advisors', percentage: 1, tokens: 79200000, color: '#ec4899', description: '2-year vesting for expertise' },
+    { category: 'Airdrops', percentage: 1, tokens: 19800000, color: '#10b981', description: '1-year community rewards' }
   ];
 
   const presalePhases = [
